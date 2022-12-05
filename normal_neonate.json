@@ -1,0 +1,1063 @@
+{
+  "Name": "Normal neonate",
+  "Description": "normal 3.3 kg neonate at an age of 24h with shunts",
+  "Weight": 3.3,
+  "ModelTimeTotal": 0,
+  "ModelingStepsize": 0.0005,
+  "Components": {
+    "AA": {
+      "Name": "AA",
+      "Description": "ascending aorta",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.004554,
+      "UVol": 0.003,
+      "ElBase": 23000,
+      "ElK": 0
+    },
+    "AAR": {
+      "Name": "AAR",
+      "Description": "aortic arch",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.004870372057873171,
+      "UVol": 0.0032,
+      "ElBase": 28000,
+      "ElK": 0
+    },
+    "AD": {
+      "Name": "AD",
+      "Description": "descending aorta",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.02935564265441993,
+      "UVol": 0.018,
+      "ElBase": 10000,
+      "ElK": 0
+    },
+    "RLB": {
+      "Name": "RLB",
+      "Description": "lower body",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.0033,
+      "UVol": 0.001,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "LS": {
+      "Name": "LS",
+      "Description": "liver and spleen",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.0033,
+      "UVol": 0.001,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "KID": {
+      "Name": "KID",
+      "Description": "kidneys",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.0033,
+      "UVol": 0.001,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "INT": {
+      "Name": "INT",
+      "Description": "intestines",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.0033,
+      "UVol": 0.001,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "RUB": {
+      "Name": "RUB",
+      "Description": "upper body",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.00135,
+      "UVol": 0.00105,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "BR": {
+      "Name": "BR",
+      "Description": "brain",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.00135,
+      "UVol": 0.00105,
+      "ElBase": 25124,
+      "ElK": 0
+    },
+    "IVCI": {
+      "Name": "IVCI",
+      "Description": "vena cava inferior intrathoracic",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.016176288666482266,
+      "UVol": 0.0109824,
+      "ElBase": 780,
+      "ElK": 0
+    },
+    "IVCE": {
+      "Name": "IVCE",
+      "Description": "vena cava inferior extrathoracic ",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.08424209047211135,
+      "UVol": 0.05710848,
+      "ElBase": 146,
+      "ElK": 0
+    },
+    "SVC": {
+      "Name": "SVC",
+      "Description": "superior vena cava",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.0758415645326887,
+      "UVol": 0.03624192,
+      "ElBase": 230,
+      "ElK": 0
+    },
+    "PA": {
+      "Name": "PA",
+      "Description": "pulmonary artery",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.00598044851676989,
+      "UVol": 0.0020523,
+      "ElBase": 5000,
+      "ElK": 0
+    },
+    "LL": {
+      "Name": "LL",
+      "Description": "left lung",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.005654058574009633,
+      "UVol": 0.00113603,
+      "ElBase": 4398,
+      "ElK": 0
+    },
+    "RL": {
+      "Name": "RL",
+      "Description": "right lung",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.005654058574009633,
+      "UVol": 0.00113603,
+      "ElBase": 4398,
+      "ElK": 0
+    },
+    "PV": {
+      "Name": "PV",
+      "Description": "pulmonary veins",
+      "ModelType": "BloodCompliance",
+      "IsEnabled": true,
+      "Vol": 0.007152031736221479,
+      "UVol": 0.00514553,
+      "ElBase": 4535,
+      "ElK": 0
+    },
+    "LA": {
+      "Name": "LA",
+      "Description": "left atrium",
+      "ModelType": "BloodTimeVaryingElastance",
+      "IsEnabled": true,
+      "Vol": 0.00276665414213919,
+      "UVol": 0.0,
+      "ElMin": 900,
+      "ElMax": 1500,
+      "ElK": 0
+    },
+    "LV": {
+      "Name": "LV",
+      "Description": "left ventricle",
+      "ModelType": "BloodTimeVaryingElastance",
+      "IsEnabled": true,
+      "Vol": 0.011550631290386972,
+      "UVol": 0.002,
+      "ElMin": 500,
+      "ElMax": 17000,
+      "ElK": 0
+    },
+    "RA": {
+      "Name": "RA",
+      "Description": "right atrium",
+      "ModelType": "BloodTimeVaryingElastance",
+      "IsEnabled": true,
+      "Vol": 0.00276665414213919,
+      "UVol": 0.0,
+      "ElMin": 700,
+      "ElMax": 1500,
+      "ElK": 0
+    },
+    "RV": {
+      "Name": "RV",
+      "Description": "right ventricle",
+      "ModelType": "BloodTimeVaryingElastance",
+      "IsEnabled": true,
+      "Vol": 0.011550631290386972,
+      "UVol": 0.002,
+      "ElMin": 500,
+      "ElMax": 17000,
+      "ElK": 0
+    },
+    "COR": {
+      "Name": "COR",
+      "Description": "coronary arteries",
+      "ModelType": "BloodTimeVaryingElastance",
+      "IsEnabled": true,
+      "Vol": 0.000396,
+      "UVol": 0.0002574,
+      "ElMin": 324675,
+      "ElMax": 700000,
+      "ElK": 0
+    },
+    "AA_AAR": {
+      "Name": "AA_AAR",
+      "Description": "ascending aorta to aortic arch",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AA",
+      "CompTo": "AAR",
+      "RFor": 50,
+      "RBack": 50,
+      "Rk": 0
+    },
+    "AA_COR": {
+      "Name": "AA_COR",
+      "Description": "ascending aorta to coronaries",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AA",
+      "CompTo": "COR",
+      "RFor": 300000,
+      "RBack": 300000,
+      "Rk": 0
+    },
+    "COR_RA": {
+      "Name": "COR_RA",
+      "Description": "coronaries to right atrium",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "COR",
+      "CompTo": "RA",
+      "RFor": 75000,
+      "RBack": 75000,
+      "Rk": 0
+    },
+    "AAR_AD": {
+      "Name": "AAR_AD",
+      "Description": "aortic arch to descending aorta",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AAR",
+      "CompTo": "AD",
+      "RFor": 50,
+      "RBack": 50,
+      "Rk": 0
+    },
+    "AD_RLB": {
+      "Name": "AD_RLB",
+      "Description": "descending aorta to lower body",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AD",
+      "CompTo": "RLB",
+      "RFor": 7902,
+      "RBack": 7902,
+      "Rk": 0
+    },
+    "AD_LS": {
+      "Name": "AD_LS",
+      "Description": "descending aorta to liver and spleen",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AD",
+      "CompTo": "LS",
+      "RFor": 18751,
+      "RBack": 18751,
+      "Rk": 0
+    },
+    "AD_KID": {
+      "Name": "AD_KID",
+      "Description": "descending aorta to kidneys",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AD",
+      "CompTo": "KID",
+      "RFor": 17664,
+      "RBack": 17664,
+      "Rk": 0
+    },
+    "AD_INT": {
+      "Name": "AD_INT",
+      "Description": "descending aorta to intestines",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AD",
+      "CompTo": "INT",
+      "RFor": 10355,
+      "RBack": 10355,
+      "Rk": 0
+    },
+    "AAR_RUB": {
+      "Name": "AAR_RUB",
+      "Description": "aortic arch to upper body",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AAR",
+      "CompTo": "RUB",
+      "RFor": 22000,
+      "RBack": 22000,
+      "Rk": 0
+    },
+    "AAR_BR": {
+      "Name": "AAR_BR",
+      "Description": "aortic arch to brain",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "AAR",
+      "CompTo": "BR",
+      "RFor": 6000,
+      "RBack": 6000,
+      "Rk": 0
+    },
+    "RUB_SVC": {
+      "Name": "RUB_SVC",
+      "Description": "upper body to superior vena cava",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "RUB",
+      "CompTo": "SVC",
+      "RFor": 9000,
+      "RBack": 9000,
+      "Rk": 0
+    },
+    "BR_SVC": {
+      "Name": "BR_SVC",
+      "Description": "BR to superior vena cava",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "BR",
+      "CompTo": "SVC",
+      "RFor": 8000,
+      "RBack": 8000,
+      "Rk": 0
+    },
+    "RLB_IVCE": {
+      "Name": "RLB_IVCE",
+      "Description": "lower body to extrathoracic vci",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "RLB",
+      "CompTo": "IVCE",
+      "RFor": 11853,
+      "RBack": 11853,
+      "Rk": 0
+    },
+    "LS_IVCE": {
+      "Name": "LS_IVCE",
+      "Description": "liver and spleen to extrathoracic vci",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "LS",
+      "CompTo": "IVCE",
+      "RFor": 28121,
+      "RBack": 28121,
+      "Rk": 0
+    },
+    "KID_IVCE": {
+      "Name": "KID_IVCE",
+      "Description": "kidneys to extrathoracic vci",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "KID",
+      "CompTo": "IVCE",
+      "RFor": 26497,
+      "RBack": 26497,
+      "Rk": 0
+    },
+    "INT_IVCE": {
+      "Name": "INT_IVCE",
+      "Description": "intestines to extrathoracic vci",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "INT",
+      "CompTo": "IVCE",
+      "RFor": 15532,
+      "RBack": 15532,
+      "Rk": 0
+    },
+    "IVCE_IVCI": {
+      "Name": "IVCE_IVCI",
+      "Description": "extrahoracic vena cava inferior to intrathoracic vci",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "IVCE",
+      "CompTo": "IVCI",
+      "RFor": 12.5,
+      "RBack": 12.5,
+      "Rk": 0
+    },
+    "IVCI_RA": {
+      "Name": "IVCI_RA",
+      "Description": "intrathoracic vena cava inferior to right atrium",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "IVCI",
+      "CompTo": "RA",
+      "RFor": 125.0,
+      "RBack": 625.0,
+      "Rk": 0
+    },
+    "SVC_RA": {
+      "Name": "SVC_RA",
+      "Description": "superior vena cava inferior to right atrium",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "SVC",
+      "CompTo": "RA",
+      "RFor": 150.0,
+      "RBack": 750.0,
+      "Rk": 0
+    },
+    "PA_LL": {
+      "Name": "PA_LL",
+      "Description": "pulmonary artery to left lung",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "PA",
+      "CompTo": "LL",
+      "RFor": 1800,
+      "RBack": 1800,
+      "Rk": 0
+    },
+    "PA_RL": {
+      "Name": "PA_RL",
+      "Description": "pulmonary artery to right lung",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "PA",
+      "CompTo": "RL",
+      "RFor": 1800,
+      "RBack": 1800,
+      "Rk": 0
+    },
+    "LL_PV": {
+      "Name": "LL_PV",
+      "Description": "left lung to pulmonary veins",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "LL",
+      "CompTo": "PV",
+      "RFor": 1800,
+      "RBack": 1800,
+      "Rk": 0
+    },
+    "RL_PV": {
+      "Name": "RL_PV",
+      "Description": "right lung to pulmonary veins",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "RL",
+      "CompTo": "PV",
+      "RFor": 1800,
+      "RBack": 1800,
+      "Rk": 0
+    },
+    "PV_LA": {
+      "Name": "PV_LA",
+      "Description": "pulmonary veins to  left atrium",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "PV",
+      "CompTo": "LA",
+      "RFor": 300,
+      "RBack": 300,
+      "Rk": 0
+    },
+    "RA_RV": {
+      "Name": "RA_RV",
+      "Description": "tricuspid Valve",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": true,
+      "CompFrom": "RA",
+      "CompTo": "RV",
+      "RFor": 60,
+      "RBack": 60,
+      "Rk": 0
+    },
+    "RV_PA": {
+      "Name": "RV_PA",
+      "Description": "pulmonary Valve",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": true,
+      "CompFrom": "RV",
+      "CompTo": "PA",
+      "RFor": 18,
+      "RBack": 18,
+      "Rk": 0
+    },
+    "LA_LV": {
+      "Name": "LA_LV",
+      "Description": "mitral Valve",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": true,
+      "CompFrom": "LA",
+      "CompTo": "LV",
+      "RFor": 60,
+      "RBack": 60,
+      "Rk": 0
+    },
+    "LV_AA": {
+      "Name": "LV_AA",
+      "Description": "aortic Valve",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": true,
+      "CompFrom": "LV",
+      "CompTo": "AA",
+      "RFor": 18,
+      "RBack": 18,
+      "Rk": 0
+    },
+    "DA": {
+      "Name": "DA",
+      "Description": "ductus arteriosus",
+      "ModelType": "BloodResistor",
+      "IsEnabled": false,
+      "NoFlow": true,
+      "NoBackFlow": false,
+      "CompFrom": "AAR",
+      "CompTo": "PA",
+      "RFor": 5000.0,
+      "RBack": 5000.0,
+      "Rk": 100000.0
+    },
+    "FO": {
+      "Name": "FO",
+      "Description": "foramen ovale",
+      "ModelType": "BloodResistor",
+      "IsEnabled": false,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "LA",
+      "CompTo": "RA",
+      "RFor": 5000,
+      "RBack": 500,
+      "Rk": 0
+    },
+    "VSD": {
+      "Name": "VSD",
+      "Description": "ventricular septal defect",
+      "ModelType": "BloodResistor",
+      "IsEnabled": false,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "LV",
+      "CompTo": "RV",
+      "RFor": 5000,
+      "RBack": 5000,
+      "Rk": 0
+    },
+    "IPS": {
+      "Name": "IPS",
+      "Description": "lung shunt",
+      "ModelType": "BloodResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "PA",
+      "CompTo": "PV",
+      "RFor": 35000,
+      "RBack": 35000,
+      "Rk": 0
+    },
+    "MOUTH": {
+      "Name": "MOUTH",
+      "Description": "MOUTHside air",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 1000000,
+      "UVol": 1000000,
+      "ElBase": 0.00076,
+      "ElK": 0
+    },
+    "DS": {
+      "Name": "DS",
+      "Description": "dead space",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.005,
+      "UVol": 0.005,
+      "ElBase": 40000,
+      "ElK": 0
+    },
+    "ALL": {
+      "Name": "ALL",
+      "Description": "alveolar left lung",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.05,
+      "UVol": 0.0425,
+      "ElBase": 400.0,
+      "ElK": 0
+    },
+    "ALR": {
+      "Name": "ALR",
+      "Description": "alveolar right lung",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.05,
+      "UVol": 0.0425,
+      "ElBase": 400.0,
+      "ElK": 0
+    },
+    "CHEST_L": {
+      "Name": "CHEST_L",
+      "Description": "pleural space left",
+      "ModelType": "Container",
+      "IsEnabled": true,
+      "Comps": [
+        "ALL"
+      ],
+      "Vol": 0.05,
+      "UVol": 0.065,
+      "ElBase": 200.0,
+      "ElK": 0
+    },
+    "CHEST_R": {
+      "Name": "CHEST_R",
+      "Description": "pleural space right",
+      "ModelType": "Container",
+      "IsEnabled": true,
+      "Comps": [
+        "ALR"
+      ],
+      "Vol": 0.05,
+      "UVol": 0.065,
+      "ElBase": 200.0,
+      "ElK": 0
+    },
+    "MOUTH_DS": {
+      "Name": "MOUTH_DS",
+      "Description": "MOUTHside air to dead space",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "MOUTH",
+      "CompTo": "DS",
+      "RFor": 25,
+      "RBack": 25,
+      "Rk": 0
+    },
+    "DS_ALL": {
+      "Name": "DS_ALL",
+      "Description": "non-collapsible airways to alveolar left lung",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "DS",
+      "CompTo": "ALL",
+      "RFor": 75,
+      "RBack": 75,
+      "Rk": 0
+    },
+    "DS_ALR": {
+      "Name": "DS_ALR",
+      "Description": "non-collapsible airways to alveolar right lung",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "DS",
+      "CompTo": "ALR",
+      "RFor": 75,
+      "RBack": 75,
+      "Rk": 0
+    },
+    "PC": {
+      "Name": "PC",
+      "Description": "pericardium",
+      "ModelType": "Container",
+      "IsEnabled": true,
+      "Comps": [
+        "RA",
+        "RV",
+        "LA",
+        "LV"
+      ],
+      "Vol": 0.0,
+      "UVol": 0.0,
+      "ElBase": 10,
+      "ElK": 0
+    },
+    "GASEX_LL": {
+      "Name": "GASEX_LL",
+      "Description": "Gas exchanger blood-gas left lung",
+      "ModelType": "GasExchanger",
+      "CompBlood": "LL",
+      "CompGas": "ALL",
+      "IsEnabled": true,
+      "DifO2": 0.01,
+      "DifCo2": 0.01
+    },
+    "GASEX_LR": {
+      "Name": "GASEX_LR",
+      "Description": "Gas exchanger blood-gas right lung",
+      "ModelType": "GasExchanger",
+      "CompBlood": "RL",
+      "CompGas": "ALR",
+      "IsEnabled": true,
+      "DifO2": 0.01,
+      "DifCo2": 0.01
+    },
+    "Heart": {
+      "Name": "Heart",
+      "Description": "heart ecg and activation",
+      "ModelType": "Heart",
+      "IsEnabled": true,
+      "AafRightTargets": [
+        "RA"
+      ],
+      "AafLeftTargets": [
+        "LA"
+      ],
+      "VafRightTargets": [
+        "RV"
+      ],
+      "VafLeftTargets": [
+        "LV"
+      ],
+      "Coronaries": [
+        "COR"
+      ],
+      "HeartRate": 120,
+      "HeartRateRef": 120,
+      "VenticularEscapeRate": 40,
+      "RhythmType": 0,
+      "PqTime": 0.1,
+      "AvDelay": 0.02,
+      "QrsTime": 0.075,
+      "QtTime": 0.4,
+      "CqtTime": 0.19773180231718618
+    },
+    "Metabolism": {
+      "Name": "Metabolism",
+      "Description": "Metabolism model",
+      "ModelType": "Metabolism",
+      "IsEnabled": true,
+      "Vo2": 10.0,
+      "RespQ": 0.5,
+      "BodyTemp": 37.0,
+      "Comps": [
+        {
+          "Name": "RLB",
+          "FVo2": 0.185
+        },
+        {
+          "Name": "RUB",
+          "FVo2": 0.2
+        },
+        {
+          "Name": "AA",
+          "FVo2": 0.005
+        },
+        {
+          "Name": "AD",
+          "FVo2": 0.01
+        },
+        {
+          "Name": "BR",
+          "FVo2": 0.55
+        }
+      ]
+    },
+    "Blood": {
+      "Name": "Blood",
+      "Description": "blood composition model",
+      "ModelType": "Blood",
+      "IsEnabled": true,
+      "Solutes": [
+        {
+          "Name": "To2",
+          "Conc": 6.9,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Tco2",
+          "Conc": 27.18,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Alb",
+          "Conc": 30.0,
+          "Unit": "g/l"
+        },
+        {
+          "Name": "Pi",
+          "Conc": 1.5,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "U",
+          "Conc": 7.2,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Na",
+          "Conc": 138.0,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "K",
+          "Conc": 4.0,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Ca",
+          "Conc": 1.0,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Mg",
+          "Conc": 0.9,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Cl",
+          "Conc": 103,
+          "Unit": "mmol/l"
+        },
+        {
+          "Name": "Lact",
+          "Conc": 1.0,
+          "Unit": "mmol/l"
+        }
+      ]
+    },
+    "Gas": {
+      "Name": "Gas",
+      "Description": "gas composition model",
+      "ModelType": "Gas",
+      "IsEnabled": true,
+      "Pres0": 760,
+      "InspiredAir": {
+        "Components": [
+          "MOUTH"
+        ],
+        "Fh2o": 0.0223,
+        "Fo2": 0.205,
+        "Fco2": 0.000392,
+        "Fn2": 0.772308
+      },
+      "TempSettings": [
+        {
+          "Name": "MOUTH",
+          "TargetTemp": 20.0
+        },
+        {
+          "Name": "DS",
+          "TargetTemp": 37.0
+        },
+        {
+          "Name": "ALL",
+          "TargetTemp": 37.0
+        },
+        {
+          "Name": "ALR",
+          "TargetTemp": 37.0
+        }
+      ]
+    },
+    "Breathing": {
+      "Name": "Breathing",
+      "Description": "spontaneous breathing model",
+      "ModelType": "Breathing",
+      "IsEnabled": true,
+      "BreathingEnabled": true,
+      "RespRate": 40,
+      "RefMinuteVolume": 0.63,
+      "RefTidalVolume": 0.01547,
+      "TargetMinuteVolume": 0.63,
+      "TargetTidalVolume": 0.01547,
+      "VtRrRatio": 0.00038,
+      "IeRatio": 0.30,
+      "RespMusclePressure": 0,
+      "RmpGain": 9.0,
+      "ExpTVSource": "MOUTH_DS",
+      "Targets": [
+        "CHEST_L",
+        "CHEST_R"
+      ]
+    },
+    "AcidBase": {
+      "Name": "AcidBase",
+      "Description": "",
+      "ModelType": "AcidBase",
+      "IsEnabled": true,
+      "AlphaCo2P": 0.03067
+    },
+    "Oxygenation": {
+      "Name": "Oxygenation",
+      "Description": "",
+      "ModelType": "Oxygenation",
+      "IsEnabled": true,
+      "Hemoglobin": 8.0,
+      "Dpg": 5.0
+    },
+    "Environment": {
+      "Name": "Environment",
+      "Description": "",
+      "ModelType": "Environment",
+      "IsEnabled": true,
+      "PresAtm": 760,
+      "OutsideTemp": 20
+    },
+    "AutonomicNervousSystem": {
+      "Name": "AutonomicNervousSystem",
+      "Description": "",
+      "ModelType": "AutonomicNervousSystem",
+      "IsEnabled": true,
+      "BaroreceptorLocation": "AA",
+      "ChemoreceptorLocation": "AA",
+      "AcidBaseModelName": "AcidBase",
+      "OxygenationModelName": "Oxygenation",
+      "SetBaro": 53,
+      "MinBaro": 30,
+      "MaxBaro": 76,
+      "TcHpBaro": 2.0,
+      "TcContBaro": 2.0,
+      "TcResBaro": 2.0,
+      "TcUvolBaro": 2.0,
+      "GHpBaro": 0.0217,
+      "GContBaro": 1.0,
+      "GResBaro": 1.0,
+      "GUvolBaro": 1.0,
+      "SetPo2": 80,
+      "MinPo2": 30,
+      "MaxPo2": 150,
+      "TcVePo2": 2.0,
+      "GVePo2": 0.0,
+      "TcHpPo2": 2.0,
+      "GHpPo2": 0.0,
+      "SetPco2": 40,
+      "MinPco2": 25,
+      "MaxPco2": 75,
+      "TcVePco2": 2.0,
+      "GVePco2": 0.02,
+      "TcHpPco2": 2.0,
+      "GHpPco2": 0.0,
+      "SetPh": 7.40,
+      "MinPh": 6.90,
+      "MaxPh": 7.70,
+      "TcVePh": 2.0,
+      "GVePh": -2.0,
+      "SetLungStretch": 53,
+      "MinLungStretch": 53,
+      "MaxLungStretch": 53,
+      "TcVeLungStretch": 2.0,
+      "GVeLungStretch": 0.0,
+      "HeartModelName": "Heart",
+      "BreathingModelName": "Breathing",
+      "LungCompartments": ["ALL", "ALR"],
+      "SystemicResistors": [],
+      "UnstressedVolumes": [],
+      "UpdateInterval": 0.015
+    },
+    "Myocardium": {
+      "Name": "Myocardium",
+      "Description": "",
+      "ModelType": "Myocardium",
+      "IsEnabled": true,
+      "HeartModelName": "Heart",
+      "LeftVentricleName": "LV",
+      "RightVentricleName": "RV",
+      "CoronariesName": "COR",
+      "SetTo2": 0.015,
+      "MinTo2": 0.0,
+      "MaxTo2": 10.0,
+      "TcHpTo2": 5,
+      "TcContTo2": 10,
+      "GHpTo2": 0,
+      "GContTo2": 0
+    },
+    "MechanicalVentilator": {
+      "Name": "MechanicalVentilator",
+      "Description": "",
+      "ModelType": "MechanicalVentilator",
+      "IsEnabled": true
+    },
+    "ChestCompressions": {
+      "Name": "ChestCompressions",
+      "Description": "",
+      "ModelType": "ChestCompressions",
+      "IsEnabled": true
+    }
+  }
+}
