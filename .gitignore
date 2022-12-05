@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.ipynb
 
 # Notebook Checkpoints
 .ipynb_checkpoints/
@@ -8,5 +9,3 @@ __pycache__/
 # venv
 venv/
 
-# notebooks
-*.ipynb
