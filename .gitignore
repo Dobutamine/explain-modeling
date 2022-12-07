@@ -7,6 +7,8 @@ __pycache__/
 
 # Notebook Checkpoints
 .ipynb_checkpoints/
+explain_core/__pycache__
+explain_core/.ipynb_checkpoints
 
 # venv
 venv/
