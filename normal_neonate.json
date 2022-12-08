@@ -756,9 +756,9 @@
       "Name": "GASEX_LL",
       "Description": "Gas exchanger blood-gas left lung",
       "ModelType": "GasExchanger",
+      "IsEnabled": true,
       "CompBlood": "LL",
       "CompGas": "ALL",
-      "IsEnabled": true,
       "DifO2": 0.01,
       "DifCo2": 0.01
     },
@@ -766,9 +766,9 @@
       "Name": "GASEX_LR",
       "Description": "Gas exchanger blood-gas right lung",
       "ModelType": "GasExchanger",
+      "IsEnabled": true,
       "CompBlood": "RL",
       "CompGas": "ALR",
-      "IsEnabled": true,
       "DifO2": 0.01,
       "DifCo2": 0.01
     },
@@ -801,28 +801,13 @@
       "Vo2": 10.0,
       "RespQ": 0.5,
       "BodyTemp": 37.0,
-      "Comps": [
-        {
-          "Name": "RLB",
-          "FVo2": 0.185
-        },
-        {
-          "Name": "RUB",
-          "FVo2": 0.2
-        },
-        {
-          "Name": "AA",
-          "FVo2": 0.005
-        },
-        {
-          "Name": "AD",
-          "FVo2": 0.01
-        },
-        {
-          "Name": "BR",
-          "FVo2": 0.55
-        }
-      ]
+      "Models": {
+        "RLB": 0.185,
+        "RUB": 0.2,
+        "AA": 0.005,
+        "AD": 0.01,
+        "BR": 0.55
+      }
     },
     "Blood": {
       "Name": "Blood",
