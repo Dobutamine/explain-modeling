@@ -878,7 +878,6 @@
       "IeRatio": 0.3,
       "RespMusclePressure": 0,
       "RmpGain": 9.0,
-      "ExpTVSource": "MOUTH_DS",
       "Targets": ["CHEST_L", "CHEST_R"]
     },
     "AcidBase": {
