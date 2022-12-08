@@ -1,4 +1,6 @@
-class ModelClass:
+from abc import ABC, abstractmethod, abstractproperty
+
+class TestClass:
     """
     The model class is the building block of Explain and at least 4 methods.
     
@@ -22,43 +24,27 @@ class ModelClass:
     As Explain is translated into multiple programming languages the naming conventions of Python are not always used.
     """
 
-    # common class parameters
-    Name = ""
-    Description = ""
-    ModelType = ""
-    IsEnabled = False
-
     # common local parameters
     _modelEngine = {}
     _t = 0.0005
     _is_initialized = False
 
-    # constructor
+    # # constructor
+    @abstractmethod
     def __init__(self, **args):
-        # initialize the super class
-        super().__init__()
-
-        # set the values of the independent properties with the values from the JSON configuration file
-        for key, value in args.items():
-            setattr(self, key, value)
-
+      pass
 
     # model initializer
+    @abstractmethod
     def InitModel(self, modelEngine):
-        # store a reference to the model
-        self._modelEngine = modelEngine
-
-        # store the modeling stepsize for easy referencing
-        self._t = modelEngine.ModelingStepsize
-
-        # signal that the component has been initialized
-        self._is_initialized = True
+      pass
 
     # this method is called every model step by the Explain ModelEngine
+    @abstractmethod
     def StepModel(self):
-        if (self.IsEnabled and self._is_initialized):
-            self.CalcModel()
+      pass
 
     # this method is responsible for the actual model calculations
+    @abstractmethod
     def CalcModel(self):
-        pass
+      pass

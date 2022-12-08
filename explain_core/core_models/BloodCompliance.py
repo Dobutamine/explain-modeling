@@ -1,10 +1,6 @@
-class BloodCompliance:
-    # class attributes
-    Name = ""
-    Description = ""
-    ModelType = ""
-    IsEnabled = False
+from explain_core.helpers.ModelBaseClass import ModelBaseClass
 
+class BloodCompliance(ModelBaseClass):
     # state variables pressure
     Pres = 0
     Pres0 = 0
@@ -42,9 +38,6 @@ class BloodCompliance:
     Solutes = []
 
     # local parameters
-    _model = {}
-    _t = 0.0005
-    _is_initialized = False
     _temp_pres_max = -1000
     _temp_pres_min = 1000
     _temp_vol_max = -1000
@@ -52,28 +45,8 @@ class BloodCompliance:
     _eval_timer = 0
     _eval_time = 1.0
 
-    def __init__(self, **args):
-        # initialize the super class
-        super().__init__()
 
-        # set the values of the independent properties with the values from the JSON configuration file
-        for key, value in args.items():
-            setattr(self, key, value)
-
-    def InitModel(self, model):
-        # store a reference to the model
-        self._model = model
-
-        # store the modeling stepsize for easy referencing
-        self._t = model.ModelingStepsize
-
-        # signal that the component has been initialized
-        self._is_initialized = True
-
-    def StepModel(self):
-        if (self.IsEnabled and self._is_initialized):
-            self.CalcModel()
-
+    # override the base class CalcModel method
     def CalcModel(self):
         # calculate the pressure depending on the elastance
         self.Pres = self.ElBase * (1.0 + self.ElK * (self.Vol - self.UVol)) * (self.Vol - self.UVol) + self.Pres0 + self.PresExt + self.PresCc + self.PresMus
@@ -92,8 +65,6 @@ class BloodCompliance:
         self.Vol += dvol
 
         # calculate the change in solute concentration
-
-
 
     def VolumeOut(self, dvol):
         # declare a volume deficit

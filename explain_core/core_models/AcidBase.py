@@ -1,13 +1,10 @@
 import math
 
+from explain_core.helpers.ModelBaseClass import ModelBaseClass
 from explain_core.helpers.BrentRootFinding import Brent
 
-class AcidBase:
+class AcidBase(ModelBaseClass):
     # class attributes
-    Name = ""
-    Description = ""
-    ModelType = ""
-    IsEnabled = False
     AlphaCo2P = 0.03067
 
     # set the brent root finding properties
@@ -33,23 +30,6 @@ class AcidBase:
     _cco2 = 0
     _cco3 = 0
     _oh = 0
-
-    def __init__(self, **args):
-        # initialize the super class
-        super().__init__()
-
-        # set the values of the independent properties with the values from the JSON configuration file
-        for key, value in args.items():
-            setattr(self, key, value)
-
-    def InitModel(self, model):
-        pass
-
-    def StepModel(self):
-        pass
-
-    def CalcModel(self):
-        pass
 
     def calc_acid_base(self, tco2, sid = 35.9, alb = 25.0, pi = 1.64, u = 0.0):
         # declare a new blood gas instance

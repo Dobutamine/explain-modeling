@@ -1,14 +1,11 @@
 import math
 
+from explain_core.helpers.ModelBaseClass import ModelBaseClass
 from explain_core.helpers.BrentRootFinding import Brent
 
-class Oxygenation:
+class Oxygenation(ModelBaseClass):
 
     # class attributes
-    Name = ""
-    Description = ""
-    ModelType = ""
-    IsEnabled = False
     Hemoglobin = 0.0
     Dpg = 0.0
 
@@ -32,23 +29,6 @@ class Oxygenation:
     _so2 = 0
     _po2 = 0
     _pres = 760
-
-    def __init__(self, **args):
-        # initialize the super class
-        super().__init__()
-
-        # set the values of the independent properties with the values from the JSON configuration file
-        for key, value in args.items():
-            setattr(self, key, value)
-
-    def InitModel(self, model):
-        pass
-
-    def StepModel(self):
-        pass
-
-    def CalcModel(self):
-        pass
 
     def calc_oxygenation(self, to2: float, hb = 8.0, temp = 37.0, ph = 7.40,  dpg = 5, be = 0.0, pres = 760 ):
 
