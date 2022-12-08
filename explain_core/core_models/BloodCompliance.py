@@ -15,6 +15,7 @@ class BloodCompliance(ModelBaseClass):
     PresMus = 0
     PresExt = 0
     PresCc = 0
+    Solutes = {}
 
     # override the base class CalcModel method
     def CalcModel(self):
@@ -31,6 +32,11 @@ class BloodCompliance(ModelBaseClass):
     def VolumeIn(self, dvol, compFrom):
         # increase the volume
         self.Vol += dvol
+
+        # calculate the change in solute concentration 
+        for solute, value in self.Solutes.items():
+            dSol = (compFrom.Solutes[solute] - value) * dvol
+            self.Solutes[solute] = ((value * self.Vol) + dSol) / self.Vol
 
     def VolumeOut(self, dvol):
         # declare a volume deficit

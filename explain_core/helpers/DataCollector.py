@@ -13,3 +13,6 @@ class DataCollector:
 
         # signal that the component has been initialized
         self._is_initialized = True
+
+    def Update(self):
+        pass

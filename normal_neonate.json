@@ -826,63 +826,19 @@
       "Description": "blood composition model",
       "ModelType": "Blood",
       "IsEnabled": true,
-      "Solutes": [
-        {
-          "Name": "To2",
-          "Conc": 6.9,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Tco2",
-          "Conc": 27.18,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Alb",
-          "Conc": 30.0,
-          "Unit": "g/l"
-        },
-        {
-          "Name": "Pi",
-          "Conc": 1.5,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "U",
-          "Conc": 7.2,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Na",
-          "Conc": 138.0,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "K",
-          "Conc": 4.0,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Ca",
-          "Conc": 1.0,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Mg",
-          "Conc": 0.9,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Cl",
-          "Conc": 103,
-          "Unit": "mmol/l"
-        },
-        {
-          "Name": "Lact",
-          "Conc": 1.0,
-          "Unit": "mmol/l"
-        }
-      ]
+      "Solutes": {
+        "To2": 6.9,
+        "Tco2": 27.18,
+        "Alb": 30.0,
+        "Pi": 1.5,
+        "U": 7.2,
+        "Na": 138.0,
+        "K": 4.0,
+        "Ca": 1.0,
+        "Mg": 0.9,
+        "Cl": 103,
+        "Lact": 1.0
+      }
     },
     "Gas": {
       "Name": "Gas",

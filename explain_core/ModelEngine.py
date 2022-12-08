@@ -142,10 +142,12 @@ class ModelEngine:
 
         # do the calculations
         for i in range(no_steps):
-            # iterate over all the models and call the step model 
+            # iterate over all the models and call the StepModel method of each model 
             for _, model in self.Models.items():
                 model.StepModel()
-            print(self.Models["AA"].Pres)
+            
+            # update the datacollector
+            self.DataCollector.Update()
             
     def Logger(self, log_message, always_print = False):
         if (self._logging):
