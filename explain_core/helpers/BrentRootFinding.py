@@ -1,4 +1,4 @@
-def brent_root_finding(f, x0, x1, max_iter, tolerance):
+def Brent(f, x0, x1, max_iter, tolerance):
     steps = 0
 
     fx0 = f(x0)

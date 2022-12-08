@@ -36,11 +36,11 @@ class BloodResistor:
         self._model = model
 
         # store the modeling stepsize for easy referencing
-        self._t = model.modeling_stepsize
+        self._t = model.ModelingStepsize
 
         # find the blood components which this resistors connects to
-        self._comp_from = self._model.components[self.CompFrom]
-        self._comp_to = self._model.components[self.CompTo]
+        self._comp_from = self._model.Models[self.CompFrom]
+        self._comp_to = self._model.Models[self.CompTo]
 
         # signal that the component has been initialized
         self._is_initialized = True

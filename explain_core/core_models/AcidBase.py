@@ -1,6 +1,6 @@
 import math
 
-from explain_core.helpers.BrentRootFinding import brent_root_finding
+from explain_core.helpers.BrentRootFinding import Brent
 
 class AcidBase:
     # class attributes
@@ -63,7 +63,7 @@ class AcidBase:
         self._uma = u
 
         # find the hp concentration
-        r = brent_root_finding(self.net_charge_plasma, self._left_hp, self._right_hp, self._max_iterations, self._brent_accuracy)
+        r = Brent(self.net_charge_plasma, self._left_hp, self._right_hp, self._max_iterations, self._brent_accuracy)
         _result.Iterations = r[1]
         _result.Error = r[2]
 

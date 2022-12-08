@@ -1,6 +1,6 @@
 import math
 
-from explain_core.helpers.BrentRootFinding import brent_root_finding
+from explain_core.helpers.BrentRootFinding import Brent
 
 class Oxygenation:
 
@@ -67,7 +67,7 @@ class Oxygenation:
         # find the po2 and so2 and using a brent root finding procedure
 
         # the brent root finding returns a tuple (result: float, iterations: float, error: bool)
-        r = brent_root_finding(self.oxygen_content, self._left_o2, self._right_o2, self._max_iterations, self._brent_accuracy)
+        r = Brent(self.oxygen_content, self._left_o2, self._right_o2, self._max_iterations, self._brent_accuracy)
         _result.Iterations = r[1]
         _result.Error = r[2]
 

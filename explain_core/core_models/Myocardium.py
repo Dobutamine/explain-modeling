@@ -23,7 +23,7 @@ class Myocardium:
         self._model = model
 
         # store the modeling stepsize for easy referencing
-        self._t = model.modeling_stepsize
+        self._t = model.ModelingStepsize
 
         # signal that the component has been initialized
         self._is_initialized = True

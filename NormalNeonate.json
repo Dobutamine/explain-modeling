@@ -1,10 +1,11 @@
 {
+  "ExplainDefinitionID": 1.0,
   "Name": "Normal neonate",
   "Description": "normal 3.3 kg neonate at an age of 24h with shunts",
   "Weight": 3.3,
   "ModelTimeTotal": 0,
   "ModelingStepsize": 0.0005,
-  "Components": {
+  "Models": {
     "AA": {
       "Name": "AA",
       "Description": "ascending aorta",
@@ -681,9 +682,7 @@
       "Description": "pleural space left",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": [
-        "ALL"
-      ],
+      "Comps": ["ALL"],
       "Vol": 0.05,
       "UVol": 0.065,
       "ElBase": 200.0,
@@ -694,9 +693,7 @@
       "Description": "pleural space right",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": [
-        "ALR"
-      ],
+      "Comps": ["ALR"],
       "Vol": 0.05,
       "UVol": 0.065,
       "ElBase": 200.0,
@@ -746,12 +743,7 @@
       "Description": "pericardium",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": [
-        "RA",
-        "RV",
-        "LA",
-        "LV"
-      ],
+      "Comps": ["RA", "RV", "LA", "LV"],
       "Vol": 0.0,
       "UVol": 0.0,
       "ElBase": 10,
@@ -782,21 +774,11 @@
       "Description": "heart ecg and activation",
       "ModelType": "Heart",
       "IsEnabled": true,
-      "AafRightTargets": [
-        "RA"
-      ],
-      "AafLeftTargets": [
-        "LA"
-      ],
-      "VafRightTargets": [
-        "RV"
-      ],
-      "VafLeftTargets": [
-        "LV"
-      ],
-      "Coronaries": [
-        "COR"
-      ],
+      "AafRightTargets": ["RA"],
+      "AafLeftTargets": ["LA"],
+      "VafRightTargets": ["RV"],
+      "VafLeftTargets": ["LV"],
+      "Coronaries": ["COR"],
       "HeartRate": 120,
       "HeartRateRef": 120,
       "VenticularEscapeRate": 40,
@@ -908,9 +890,7 @@
       "IsEnabled": true,
       "Pres0": 760,
       "InspiredAir": {
-        "Components": [
-          "MOUTH"
-        ],
+        "Components": ["MOUTH"],
         "Fh2o": 0.0223,
         "Fo2": 0.205,
         "Fco2": 0.000392,
@@ -947,14 +927,11 @@
       "TargetMinuteVolume": 0.63,
       "TargetTidalVolume": 0.01547,
       "VtRrRatio": 0.00038,
-      "IeRatio": 0.30,
+      "IeRatio": 0.3,
       "RespMusclePressure": 0,
       "RmpGain": 9.0,
       "ExpTVSource": "MOUTH_DS",
-      "Targets": [
-        "CHEST_L",
-        "CHEST_R"
-      ]
+      "Targets": ["CHEST_L", "CHEST_R"]
     },
     "AcidBase": {
       "Name": "AcidBase",
@@ -1013,9 +990,9 @@
       "GVePco2": 0.02,
       "TcHpPco2": 2.0,
       "GHpPco2": 0.0,
-      "SetPh": 7.40,
-      "MinPh": 6.90,
-      "MaxPh": 7.70,
+      "SetPh": 7.4,
+      "MinPh": 6.9,
+      "MaxPh": 7.7,
       "TcVePh": 2.0,
       "GVePh": -2.0,
       "SetLungStretch": 53,
