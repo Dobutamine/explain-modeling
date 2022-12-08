@@ -29,13 +29,13 @@ class BloodCompliance(ModelBaseClass):
         self.PresMus = 0.0
 
 
-    def VolumeIn(self, dvol, compFrom):
+    def VolumeIn(self, dvol, modelFrom):
         # increase the volume
         self.Vol += dvol
 
         # calculate the change in solute concentration 
         for solute, value in self.Solutes.items():
-            dSol = (compFrom.Solutes[solute] - value) * dvol
+            dSol = (modelFrom.Solutes[solute] - value) * dvol
             self.Solutes[solute] = ((value * self.Vol) + dSol) / self.Vol
 
     def VolumeOut(self, dvol):

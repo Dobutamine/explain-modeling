@@ -9,7 +9,7 @@ class Blood(ModelBaseClass):
         # initialize the base class
         ModelBaseClass.InitModel(self, modelEngine)
 
-        # find all blood compliances and blood time varying elastances and transfer the solutes
+        # find all blood compliances and blood time varying elastances and transfer the solutes to the compartments
         for _, model in self._modelEngine.Models.items():
             if (model.ModelType == "BloodCompliance" or model.ModelType == "BloodTimeVaryingElastance"):
                 model.Solutes = self.Solutes.copy()

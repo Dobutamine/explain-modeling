@@ -642,8 +642,8 @@
       "Description": "MOUTHside air",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 1000000,
-      "UVol": 1000000,
+      "Vol": 100000000,
+      "UVol": 100000000,
       "ElBase": 0.00076,
       "ElK": 0
     },
@@ -682,8 +682,9 @@
       "Description": "pleural space left",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": ["ALL"],
+      "ContainedModels": ["ALL"],
       "Vol": 0.05,
+      "VolExt": 0.0,
       "UVol": 0.065,
       "ElBase": 200.0,
       "ElK": 0
@@ -693,8 +694,9 @@
       "Description": "pleural space right",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": ["ALR"],
+      "ContainedModels": ["ALR"],
       "Vol": 0.05,
+      "VolExt": 0.0,
       "UVol": 0.065,
       "ElBase": 200.0,
       "ElK": 0
@@ -743,8 +745,9 @@
       "Description": "pericardium",
       "ModelType": "Container",
       "IsEnabled": true,
-      "Comps": ["RA", "RV", "LA", "LV"],
+      "ContainedModels": ["RA", "RV", "LA", "LV"],
       "Vol": 0.0,
+      "VolExt": 0.0,
       "UVol": 0.0,
       "ElBase": 10,
       "ElK": 0
@@ -847,30 +850,18 @@
       "IsEnabled": true,
       "Pres0": 760,
       "InspiredAir": {
-        "Components": ["MOUTH"],
-        "Fh2o": 0.0223,
+        "Models": ["MOUTH"],
+        "Fh2O": 0.0223,
         "Fo2": 0.205,
         "Fco2": 0.000392,
         "Fn2": 0.772308
       },
-      "TempSettings": [
-        {
-          "Name": "MOUTH",
-          "TargetTemp": 20.0
-        },
-        {
-          "Name": "DS",
-          "TargetTemp": 37.0
-        },
-        {
-          "Name": "ALL",
-          "TargetTemp": 37.0
-        },
-        {
-          "Name": "ALR",
-          "TargetTemp": 37.0
-        }
-      ]
+      "TempSettings": {
+        "MOUTH": 20.0,
+        "DS": 37.0,
+        "ALL": 37.0,
+        "ALR": 37.0
+      }
     },
     "Breathing": {
       "Name": "Breathing",
