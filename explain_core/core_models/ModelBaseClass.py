@@ -55,6 +55,6 @@ class ModelBaseClass:
         self._is_initialized = True
 
 
-    # this method is responsible for the actual model calculations
+    # this method is responsible for the actual model calculations and will be overridden in most of the cases
     def CalcModel(self):
         pass

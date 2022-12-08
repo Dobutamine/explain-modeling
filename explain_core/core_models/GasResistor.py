@@ -1,4 +1,4 @@
-from explain_core.helpers.ModelBaseClass import ModelBaseClass
+from explain_core.core_models.ModelBaseClass import ModelBaseClass
 
 class GasResistor(ModelBaseClass):
     pass

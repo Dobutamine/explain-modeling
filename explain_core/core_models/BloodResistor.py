@@ -1,6 +1,14 @@
-from explain_core.helpers.ModelBaseClass import ModelBaseClass
+from explain_core.core_models.ModelBaseClass import ModelBaseClass
 
 class BloodResistor(ModelBaseClass):
+    # model specific attributes
+    NoFlow = False
+    NoBackFlow = False
+    CompFrom = ""
+    CompTo = ""
+    RFor = 1
+    RBack = 1
+    Rk = 0
 
     # state variables
     Flow = 0
@@ -12,19 +20,12 @@ class BloodResistor(ModelBaseClass):
 
     # override the InitModel of the model base class as this model requires additional initialization
     def InitModel(self, modelEngine):
-        # store a reference to the model
-        self._modelEngine = modelEngine
-
-        # store the modeling stepsize for easy referencing
-        self._t = modelEngine.ModelingStepsize
+        # initialize the base class
+        ModelBaseClass.InitModel(self, modelEngine)
 
         # find the blood components which this resistors connects to
         self._comp_from = self._modelEngine.Models[self.CompFrom]
         self._comp_to = self._modelEngine.Models[self.CompTo]
-
-        # signal that the component has been initialized
-        self._is_initialized = True
-
 
     def CalcModel(self):
         # get the pressures from the connected blood compliances
