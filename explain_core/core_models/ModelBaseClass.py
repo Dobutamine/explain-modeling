@@ -54,7 +54,10 @@ class ModelBaseClass:
         # signal that the component has been initialized
         self._is_initialized = True
 
-
+    def StepModel(self):
+        if (self.IsEnabled and self._is_initialized):
+            self.CalcModel()
+            
     # this method is responsible for the actual model calculations and will be overridden in most of the cases
     def CalcModel(self):
         pass

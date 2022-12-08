@@ -69,11 +69,11 @@ class Heart(ModelBaseClass):
         sa_node_period = (60.0 / self.HeartRateRef) + self.HeartPeriodChangeAns + self.HeartPeriodChangeTemp + self.HeartPeriodChangeMyo
 
         # limit the heart period depending on the HeartRateUpperLimit property
-        if (saNodePeriod < self._sa_node_period_limit ):
-            saNodePeriod = self._sa_node_period_limit
+        if (sa_node_period < self._sa_node_period_limit ):
+            sa_node_period = self._sa_node_period_limit
         
         # calculate the current heartrate
-        self.HeartRate = 60.0 / saNodePeriod
+        self.HeartRate = 60.0 / sa_node_period
 
         # has the sinus node period elapsed?
         if (self._sa_node_timer > sa_node_period):
@@ -127,7 +127,7 @@ class Heart(ModelBaseClass):
         if (self._qrs_running):
             self._qrs_timer += self._t
         
-        if (self._qt_timer):
+        if (self._qt_running):
             self._qt_timer += self._t
 
         # increase the heart activation function counters

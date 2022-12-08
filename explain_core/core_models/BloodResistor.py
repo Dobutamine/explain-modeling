@@ -29,8 +29,8 @@ class BloodResistor(ModelBaseClass):
 
     def CalcModel(self):
         # get the pressures from the connected blood compliances
-        p_u = self._comp_from.pres
-        p_d = self._comp_to.pres
+        p_u = self._comp_from.Pres
+        p_d = self._comp_to.Pres
 
         # calculate the flow in l/s
         if (p_u > p_d):

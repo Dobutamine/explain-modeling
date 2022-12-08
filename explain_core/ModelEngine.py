@@ -137,11 +137,16 @@ class ModelEngine:
         pass
 
     def Calculate(self, time_to_calculate = 10.0):
-        pass
+        # calculate the number of model steps needed
+        no_steps = int(time_to_calculate / self.ModelingStepsize)
 
-    def ModelStep(self):
-        pass
-
+        # do the calculations
+        for i in range(no_steps):
+            # iterate over all the models and call the step model 
+            for _, model in self.Models.items():
+                model.StepModel()
+            print(self.Models["AA"].Pres)
+            
     def Logger(self, log_message, always_print = False):
         if (self._logging):
             if (self._verbose or always_print):
