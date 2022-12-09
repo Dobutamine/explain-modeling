@@ -1,9 +1,8 @@
 import math
 
-from explain_core.helpers.ModelBaseClass import ModelBaseClass
 from explain_core.helpers.BrentRootFinding import Brent
 
-class Oxygenation(ModelBaseClass):
+class Oxygenation():
 
     # class attributes
     Hemoglobin = 0.0

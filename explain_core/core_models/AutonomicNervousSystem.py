@@ -118,8 +118,8 @@ class AutonomicNervousSystem(ModelBaseClass):
     
     def CalcAutonomicControl(self):
         # calculate the acid base and oxygenation properties of chemoreceptor site
-        ab = self._modelEngine.Models["AcidBase"].calc_acid_base(self._baroreceptor.Tco2)
-        oxy = self._modelEngine.Models["Oxygenation"].calc_oxygenation(self._baroreceptor.To2)
+        ab = self._modelEngine.AcidBase.calc_acid_base(self._baroreceptor.Tco2)
+        oxy = self._modelEngine.Oxygenation.calc_oxygenation(self._baroreceptor.To2)
 
         # store the results of the calculations
         self._chemoreceptor.Po2 = oxy.Po2

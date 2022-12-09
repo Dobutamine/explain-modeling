@@ -1,6 +1,10 @@
 # import the python dependencies
 import json, importlib
 
+# import the acidbase and oxygenation models
+from explain_core.core_models.AcidBase import AcidBase
+from explain_core.core_models.Oxygenation import Oxygenation
+
 # import the helper classes
 from explain_core.helpers.DataCollector import DataCollector
 from explain_core.helpers.Interface import Interface
@@ -34,6 +38,12 @@ class ModelEngine:
     # define an object holding all modelengine models
     Models = {}
 
+    # define an acid base model
+    AcidBase = {}
+
+    # define an oxygenation model
+    Oxygenation = {}
+    
     # define a datacollector
     DataCollector = {}
     
@@ -99,6 +109,12 @@ class ModelEngine:
                     # a module holding the desired model class is not found in the core_models or custom_models folder
                     self.Logger(f"{model_type} error or the model was not found in core_models nor custom_models folder.", True)
                     error_counter += 1
+
+        # initialize the acid base model
+        self.AcidBase = AcidBase()
+
+        # initialize the oxygenation model
+        self.Oxygenation = Oxygenation()
 
         # initialize a datacollector
         self.DataCollector =  DataCollector(self)

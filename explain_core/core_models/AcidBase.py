@@ -1,9 +1,7 @@
 import math
-
-from explain_core.helpers.ModelBaseClass import ModelBaseClass
 from explain_core.helpers.BrentRootFinding import Brent
 
-class AcidBase(ModelBaseClass):
+class AcidBase():
     # class attributes
     AlphaCo2P = 0.03067
 

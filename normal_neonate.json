@@ -865,21 +865,6 @@
       "RmpGain": 9.0,
       "Targets": ["CHEST_L", "CHEST_R"]
     },
-    "AcidBase": {
-      "Name": "AcidBase",
-      "Description": "",
-      "ModelType": "AcidBase",
-      "IsEnabled": true,
-      "AlphaCo2P": 0.03067
-    },
-    "Oxygenation": {
-      "Name": "Oxygenation",
-      "Description": "",
-      "ModelType": "Oxygenation",
-      "IsEnabled": true,
-      "Hemoglobin": 8.0,
-      "Dpg": 5.0
-    },
     "AutonomicNervousSystem": {
       "Name": "AutonomicNervousSystem",
       "Description": "",
