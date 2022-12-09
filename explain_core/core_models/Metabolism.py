@@ -15,7 +15,7 @@ class Metabolism(ModelBaseClass):
         # do the metabolism for each active blood compliance
         for met_model, fvo2 in self.MetabolicActiveModels.items():
             # get the to2 from the blood compartment
-            to2 = self._modelEngine.Models[met_model].Solutes['To2']
+            to2 = self._modelEngine.Models[met_model].To2
             
             # calculate the change in oxygen concentration in this step
             dto2 = vo2_step * fvo2
@@ -27,7 +27,7 @@ class Metabolism(ModelBaseClass):
                 new_to2 = 0
 
             # get the tco2 from the blood compartment
-            tco2 = self._modelEngine.Models[met_model].Solutes['Tco2']
+            tco2 = self._modelEngine.Models[met_model].Tco2
 
             # calculate the change in co2 concentration in this step
             dtco2 = vo2_step * fvo2 * self.RespQ
@@ -39,6 +39,6 @@ class Metabolism(ModelBaseClass):
                 new_tco2 = 0
 
             # store the new to2 and tco2
-            self._modelEngine.Models[met_model].Solutes['To2'] = new_to2
-            self._modelEngine.Models[met_model].Solutes['Tco2'] = new_tco2
+            self._modelEngine.Models[met_model].To2 = new_to2
+            self._modelEngine.Models[met_model].Tco2 = new_tco2
 

@@ -814,9 +814,9 @@
       "Description": "blood composition model",
       "ModelType": "Blood",
       "IsEnabled": true,
+      "To2": 6.9,
+      "Tco2": 27.18,
       "Solutes": {
-        "To2": 6.9,
-        "Tco2": 27.18,
         "Alb": 30.0,
         "Pi": 1.5,
         "U": 7.2,

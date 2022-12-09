@@ -13,8 +13,8 @@ class GasExchanger(ModelBaseClass):
 
     def CalcModel(self):
         # get the total oxygen and carbon dioxide content from the blood components
-        to2_blood = self._modelEngine.Models[self.CompBlood].Solutes["To2"]
-        tco2_blood = self._modelEngine.Models[self.CompBlood].Solutes["Tco2"]
+        to2_blood = self._modelEngine.Models[self.CompBlood].To2
+        tco2_blood = self._modelEngine.Models[self.CompBlood].Tco2
 
         # calculate the partial pressures of oxygen and carbon dioxide from the total content
         po2_blood = self._modelEngine.Models["Oxygenation"].calc_oxygenation(to2_blood).Po2
@@ -51,7 +51,7 @@ class GasExchanger(ModelBaseClass):
             new_cco2_gas = 0
 
         # transfer the new concentrations
-        self._modelEngine.Models[self.CompBlood].Solutes["To2"] = new_to2_blood
-        self._modelEngine.Models[self.CompBlood].Solutes["Tco2"] = new_tco2_blood
+        self._modelEngine.Models[self.CompBlood].To2 = new_to2_blood
+        self._modelEngine.Models[self.CompBlood].Tco2 = new_tco2_blood
         self._modelEngine.Models[self.CompGas].Co2 = new_co2_gas
         self._modelEngine.Models[self.CompGas].Cco2 = new_cco2_gas

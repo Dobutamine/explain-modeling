@@ -3,6 +3,8 @@ from explain_core.core_models.ModelBaseClass import ModelBaseClass
 class Blood(ModelBaseClass):
     # model specific attributes
     Solutes = {}
+    To2 = 0.0
+    Tco2 = 0.0
 
     # override the InitModel of the model base class as this model requires additional initialization
     def InitModel(self, modelEngine):
@@ -18,4 +20,6 @@ class Blood(ModelBaseClass):
         for _, model in self._modelEngine.Models.items():
             if (model.ModelType == "BloodCompliance" or model.ModelType == "BloodTimeVaryingElastance"):
                 model.Solutes = self.Solutes.copy()
+                model.To2 = self.To2
+                model.Tco2 = self.Tco2
 

@@ -16,6 +16,12 @@ class BloodCompliance(ModelBaseClass):
     PresExt = 0
     PresCc = 0
     Solutes = {}
+    To2 = 0.0
+    Po2 = 0.0
+    So2 = 0.0
+    Tco2 = 0.0
+    Pco2 = 0.0
+
 
     # override the base class CalcModel method
     def CalcModel(self):
@@ -33,7 +39,14 @@ class BloodCompliance(ModelBaseClass):
         # increase the volume
         self.Vol += dvol
 
-        # calculate the change in solute concentration 
+        # calculate the change in To2 and Tco2
+        dTo2 = (modelFrom.To2 - self.To2) * dvol
+        self.To2 = (self.To2 * self.Vol + dTo2) / self.Vol
+
+        dTco2 = (modelFrom.Tco2 - self.Tco2) * dvol
+        self.Tco2 = (self.Tco2 * self.Vol + dTco2) / self.Vol
+
+        # calculate the change in solutes concentrations 
         for solute, value in self.Solutes.items():
             dSol = (modelFrom.Solutes[solute] - value) * dvol
             self.Solutes[solute] = ((value * self.Vol) + dSol) / self.Vol
