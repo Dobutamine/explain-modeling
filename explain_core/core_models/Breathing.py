@@ -1,5 +1,5 @@
 import math
-from explain_core.core_models.ModelBaseClass import ModelBaseClass
+from explain_core.helpers.ModelBaseClass import ModelBaseClass
 
 class Breathing(ModelBaseClass):
     # model specific attributes

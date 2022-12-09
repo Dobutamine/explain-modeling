@@ -1,4 +1,4 @@
-from explain_core.core_models.ModelBaseClass import ModelBaseClass
+from explain_core.helpers.ModelBaseClass import ModelBaseClass
 from explain_core.helpers.ActivationFunction import ActivationFunction
 
 class AutonomicNervousSystem(ModelBaseClass):
@@ -147,6 +147,6 @@ class AutonomicNervousSystem(ModelBaseClass):
                                            + self._vePco2ActivationFunction.Update(self._chemoreceptor.Pco2) \
                                            + self._vePo2ActivationFunction.Update(self._chemoreceptor.Po2) \
                                            + self._veLungStretchActivationFunction.Update(lung_volume) 
-                                           
+
         if (self._breathing.TargetMinuteVolume <= 0):
             self._breathing.TargetMinuteVolume = 0
