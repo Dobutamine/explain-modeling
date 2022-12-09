@@ -4,7 +4,7 @@ class Gas(ModelBaseClass):
     # model specific attributes
     InspiredAir = {}
     TempSettings = {}
-    Pres0 = 760
+    PresAtm = 760.0
 
     # local parameters
     GasConstant = 62.36367
@@ -34,7 +34,7 @@ class Gas(ModelBaseClass):
             inspAirModel = self._modelEngine.Models[insp_model]
 
             # set the atmospheric pressure 
-            inspAirModel.Pres0 = self.Pres0
+            inspAirModel.Pres0 = self.PresAtm
 
             # calculate the pressure in the inspired air compliance, should be pAtm
             inspAirModel.StepModel()

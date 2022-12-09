@@ -799,9 +799,9 @@
       "ModelType": "Metabolism",
       "IsEnabled": true,
       "Vo2": 10.0,
-      "RespQ": 0.5,
+      "RespQ": 0.8,
       "BodyTemp": 37.0,
-      "Models": {
+      "MetabolicActiveModels": {
         "RLB": 0.185,
         "RUB": 0.2,
         "AA": 0.005,
@@ -833,7 +833,7 @@
       "Description": "gas composition model",
       "ModelType": "Gas",
       "IsEnabled": true,
-      "Pres0": 760,
+      "PresAtm": 760,
       "InspiredAir": {
         "Models": ["MOUTH"],
         "Fh2O": 0.0223,
@@ -879,14 +879,6 @@
       "IsEnabled": true,
       "Hemoglobin": 8.0,
       "Dpg": 5.0
-    },
-    "Environment": {
-      "Name": "Environment",
-      "Description": "",
-      "ModelType": "Environment",
-      "IsEnabled": true,
-      "PresAtm": 760,
-      "OutsideTemp": 20
     },
     "AutonomicNervousSystem": {
       "Name": "AutonomicNervousSystem",
