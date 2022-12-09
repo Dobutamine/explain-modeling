@@ -887,8 +887,6 @@
       "IsEnabled": true,
       "BaroreceptorLocation": "AA",
       "ChemoreceptorLocation": "AA",
-      "AcidBaseModelName": "AcidBase",
-      "OxygenationModelName": "Oxygenation",
       "SetBaro": 53,
       "MinBaro": 30,
       "MaxBaro": 76,

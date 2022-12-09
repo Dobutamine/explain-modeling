@@ -33,6 +33,7 @@ class Breathing(ModelBaseClass):
         self.VtRrController()
 
         # calculate the inspiratory and expiratory time
+        breath_interval = 60.0
         if (self.RespRate > 0):
             breath_interval = 60.0 / self.RespRate
             self._ti = self.IeRatio * breath_interval   # in seconds

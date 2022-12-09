@@ -25,6 +25,7 @@ class BloodTimeVaryingElastance(ModelBaseClass):
     So2 = 0.0
     Tco2 = 0.0
     Pco2 = 0.0
+    Ph = 0.0
 
     # override the base class CalcModel method
     def CalcModel(self):
