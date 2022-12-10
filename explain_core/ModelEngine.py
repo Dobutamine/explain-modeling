@@ -164,6 +164,9 @@ class ModelEngine:
             
             # update the datacollector
             self.DataCollector.Update()
+
+            # increase the model time
+            self.ModelingTimeTotal += self.ModelingStepsize
             
     def Logger(self, log_message, always_print = False):
         if (self._logging):
