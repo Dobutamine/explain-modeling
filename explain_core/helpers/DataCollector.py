@@ -1,5 +1,7 @@
+import math
+
 class DataCollector:
-    LoggingInterval = 0.0005
+    LoggingInterval = 0.015
 
     # local parameters
     _modelEngine = {}
@@ -50,7 +52,8 @@ class DataCollector:
             self._logging_timer = 0.0
             # store the data from the watchlist
             for label, wai in self._watch_list.items():
-                self._model_data.append((self._modelEngine.ModelingTimeTotal,label, getattr(wai[0], wai[1])))
+                time = round(self._modelEngine.ModelingTimeTotal, 4)
+                self._model_data.append((time,label, getattr(wai[0], wai[1])))
         
         # update the logging timer
         self._logging_timer += self._t
