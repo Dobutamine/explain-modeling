@@ -1,59 +1,92 @@
 import math
 
 class DataCollector:
-    LoggingInterval = 0.015
+  collected_data = []
+  sample_interval = 0.005
+  watch_list = []
 
-    # local parameters
-    _modelEngine = {}
-    _t = 0.0005
-    _is_initialized = False
+  # common local parameters
+  _modelEngine = {}
+  _t = 0.0005
+  _interval_counter = 0
 
-    _watch_list = {}
-    _model_data = []
+  def __init__(self, modelEngine):
+    # initialize the super class
+    super().__init__()
 
-    _logging_timer = 0.0
+    # store a reference to the model instance
+    self._modelEngine = modelEngine
 
-    def __init__(self, modelEngine):
-        # store a reference to the model
-        self._modelEngine = modelEngine
+    # define the watch list
+    self.watch_list = []
 
-        # store the modeling stepsize for easy referencing
-        self._t = modelEngine.ModelingStepsize
+    # define the data sample interval
+    self.sample_interval = 0.005
+    self._interval_counter = 0
 
-        # signal that the component has been initialized
-        self._is_initialized = True
-
-    def clear_watch_list(self):
-        self._watch_list = {}
-
-    def add_to_watch_list(self, model, prop):
-        label = model + "." + prop
-        self._watch_list[label] = (self._modelEngine.Models[model], prop)
-
-    def remove_from_watchlist(self, model, prop):
-        label = model + "." + prop
-        del self._watch_list[label]
+    # get the modeling stepsize from the model
+    self._t = modelEngine.ModelingStepsize
     
-    def clear_model_data(self):
-        # clear the model data list
-        self._model_data = []
+    # try to add two always needed ecg properties to the watchlist
+    try:
+        self.ncc_ventricular = {'label': 'Heart.NccVentricular', 'model': self._modelEngine.Models['Heart'], 'prop': 'NccVentricular'}
+        self.ncc_atrial = {'label': 'Heart.NccAtrial', 'model': self._modelEngine.Models['Heart'], 'prop': 'NccAtrial'}
+    except:
+        self.ncc_ventricular = {'label': '', 'model': None, 'prop': ''}
+        self.ncc_atrial = {'label': '', 'model': None, 'prop': ''}
 
-    def get_model_data(self):
-        # create a copy of the model data
-        md_cp = list(self._model_data)
-        # clear the current model data list
-        self._model_data = []
-        # return the copy
-        return md_cp
-
-    def Update(self):
-        if (self._logging_timer >= self.LoggingInterval):
-            # reset the logging timer
-            self._logging_timer = 0.0
-            # store the data from the watchlist
-            for label, wai in self._watch_list.items():
-                time = round(self._modelEngine.ModelingTimeTotal, 4)
-                self._model_data.append((time,label, getattr(wai[0], wai[1])))
+    # add the two always there
+    self.watch_list.append(self.ncc_atrial)
+    self.watch_list.append(self.ncc_ventricular)
         
-        # update the logging timer
-        self._logging_timer += self._t
+    # define the data list
+    self.collected_data = []
+
+  def clear_data (self):
+    self.collected_data = []
+
+  def clear_watchlist(self):
+    # first clear all data
+    self.clear_data()
+
+    # empty the watch list
+    self.watch_list = []
+
+    # add the two always there
+    self.watch_list.append(self.ncc_atrial)
+    self.watch_list.append(self.ncc_ventricular)
+
+  def set_sample_interval(self, new_interval):
+    self.sample_interval = new_interval
+
+  def add_to_watchlist(self, property):
+    # first clear all data
+    self.clear_data()
+
+    # add to the watchlist
+    self.watch_list.append(property)
+
+  def collect_data(self, model_clock):
+    if (self._interval_counter >= self.sample_interval):
+      self._interval_counter = 0
+      data_object = { 'time': model_clock }
+      for parameter in self.watch_list:
+        label = parameter['label']
+        prop = parameter['prop']
+        weight = 1
+        time = 1
+        if prop == 'flow':
+            weight = self._modelEngine.Weight
+            time = 60
+        if prop == 'vol':
+            weight = self._modelEngine.Weight
+        
+        if parameter['model'] is not None:
+            value = getattr(parameter['model'], parameter['prop'])
+                
+            data_object[label] = value / weight * time
+            
+      self.collected_data.append(data_object)
+            
+    
+    self._interval_counter += self._t

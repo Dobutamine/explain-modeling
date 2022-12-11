@@ -163,7 +163,7 @@ class ModelEngine:
                 model.StepModel()
             
             # update the datacollector
-            self.DataCollector.Update()
+            self.DataCollector.collect_data(self.ModelingTimeTotal)
 
             # increase the model time
             self.ModelingTimeTotal += self.ModelingStepsize

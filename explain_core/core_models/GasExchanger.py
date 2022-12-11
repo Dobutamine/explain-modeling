@@ -19,7 +19,10 @@ class GasExchanger(ModelBaseClass):
         # calculate the partial pressures of oxygen and carbon dioxide from the total content
         po2_blood = self._modelEngine.Oxygenation.calc_oxygenation(to2_blood).Po2
         pco2_blood = self._modelEngine.AcidBase.calc_acid_base(tco2_blood).Pco2
-
+        
+        self._modelEngine.Models[self.CompBlood].Po2 = po2_blood
+        self._modelEngine.Models[self.CompBlood].Pco2 = pco2_blood
+        
         # get the partial pressures from the gas components
         co2_gas = self._modelEngine.Models[self.CompGas].Co2
         cco2_gas = self._modelEngine.Models[self.CompGas].Cco2
