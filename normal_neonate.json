@@ -798,7 +798,7 @@
       "Description": "Metabolism model",
       "ModelType": "Metabolism",
       "IsEnabled": true,
-      "Vo2": 8.8,
+      "Vo2": 10.0,
       "RespQ": 0.8,
       "BodyTemp": 37.0,
       "MetabolicActiveModels": {
@@ -842,11 +842,11 @@
         "Fn2": 0.772308
       },
       "AlveolarAir": {
-        "Models": ["ALL", "ALR"],
+        "Models": ["DS", "ALL", "ALR"],
         "Fh2O": 0.0223,
-        "Fo2": 0.205,
-        "Fco2": 0.000392,
-        "Fn2": 0.772308
+        "Fo2": 0.14681,
+        "Fco2": 0.05485,
+        "Fn2": 0.798
       },
       "TempSettings": {
         "MOUTH": 20.0,
@@ -898,7 +898,7 @@
       "TcHpPo2": 2.0,
       "GHpPo2": 0.0,
       "SetPco2": 40,
-      "MinPco2": 25,
+      "MinPco2": 15,
       "MaxPco2": 75,
       "TcVePco2": 2.0,
       "GVePco2": 0.02,
