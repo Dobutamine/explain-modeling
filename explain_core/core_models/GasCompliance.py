@@ -97,6 +97,12 @@ class GasCompliance(ModelBaseClass):
         self.Pco2 = (self.Cco2 / self.CTotal) * self.Pres
         self.Pn2 = (self.Cn2 / self.CTotal) * self.Pres
 
+        # calculate the fractions
+        self.Fh2o = (self.Ch2o / self.CTotal)
+        self.Fo2 = (self.Co2 / self.CTotal)
+        self.Fco2 = (self.Cco2 / self.CTotal)
+        self.Fn2 = (self.Cn2 / self.CTotal)
+
     def CalcWaterVapourPressure(self, temp):
         # calculate the water vapour pressure in air depending on the temperature
         return math.pow(math.e, 20.386 - 5132 / (temp + 273))
