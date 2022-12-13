@@ -122,10 +122,13 @@ class AutonomicNervousSystem(ModelBaseClass):
         oxy = self._modelEngine.Oxygenation.calc_oxygenation(self._baroreceptor.To2)
 
         # store the results of the calculations
-        self._chemoreceptor.Po2 = oxy.Po2
-        self._chemoreceptor.So2 = oxy.So2
-        self._chemoreceptor.Pco2 = ab.Pco2
-        self._chemoreceptor.Ph = ab.Ph
+        if (not oxy.Error):
+            self._chemoreceptor.Po2 = oxy.Po2
+            self._chemoreceptor.So2 = oxy.So2
+            
+        if (not ab.Error):
+            self._chemoreceptor.Pco2 = ab.Pco2
+            self._chemoreceptor.Ph = ab.Ph
 
         # calculate the mean. In neonates the most accurate mean is given by MAP = DBP + (0.466 * (SBP-DBP))
         # map = _baroreceptor.PresMin  + 0.466 * (_baroreceptor.PresMax - _baroreceptor.PresMin);

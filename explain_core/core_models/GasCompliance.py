@@ -32,9 +32,12 @@ class GasCompliance(ModelBaseClass):
     PresMus = 0
     PresExt = 0
     PresCc = 0
+    FixedComposition = False
 
     # local parameters
     GasConstant = 62.36367
+
+
 
     def CalcModel(self):
         # add heat to the gas 
@@ -108,37 +111,47 @@ class GasCompliance(ModelBaseClass):
         return math.pow(math.e, 20.386 - 5132 / (temp + 273))
 
     def VolumeIn(self, dvol, modelFrom):
-        # increase the volume
-        self.Vol += dvol
+        if (not self.FixedComposition):
+            # increase the volume
+            self.Vol += dvol
 
-        # change the gas concentrations
-        dCo2 = (modelFrom.Co2 - self.Co2) * dvol
-        self.Co2 = ((self.Co2 * self.Vol) + dCo2) / self.Vol
+            # guard against negative values or zero
+            if (self.Vol < 0 or self.Vol == 0.0):
+                self.Vol = 0.0
+                self.Co2 = 0.0
+                self.Cco2 = 0.0
+                self.Cn2 = 0.0
+                self.Ch2o = 0.0
+            else:
+                # change the gas concentrations
+                dCo2 = (modelFrom.Co2 - self.Co2) * dvol
+                self.Co2 = ((self.Co2 * self.Vol) + dCo2) / self.Vol
 
-        dCco2 = (modelFrom.Cco2 - self.Cco2) * dvol
-        self.Cco2 = ((self.Cco2 * self.Vol) + dCco2) / self.Vol
+                dCco2 = (modelFrom.Cco2 - self.Cco2) * dvol
+                self.Cco2 = ((self.Cco2 * self.Vol) + dCco2) / self.Vol
 
-        dCn2 = (modelFrom.Cn2 - self.Cn2) * dvol
-        self.Cn2 = ((self.Cn2 * self.Vol) + dCn2) / self.Vol
+                dCn2 = (modelFrom.Cn2 - self.Cn2) * dvol
+                self.Cn2 = ((self.Cn2 * self.Vol) + dCn2) / self.Vol
 
-        dCh2o = (modelFrom.Ch2o - self.Ch2o) * dvol
-        self.Ch2o = ((self.Ch2o * self.Vol) + dCh2o) / self.Vol
+                dCh2o = (modelFrom.Ch2o - self.Ch2o) * dvol
+                self.Ch2o = ((self.Ch2o * self.Vol) + dCh2o) / self.Vol
 
-        # change temperature due to influx of gas
-        dTemp = (modelFrom.Temp - self.Temp) * dvol
-        self.Temp = ((self.Temp * self.Vol) + dTemp) / self.Vol
+                # change temperature due to influx of gas
+                dTemp = (modelFrom.Temp - self.Temp) * dvol
+                self.Temp = ((self.Temp * self.Vol) + dTemp) / self.Vol
 
     def VolumeOut(self, dvol):
-        # declare a volume deficit
+         # declare a volume deficit
         vol_deficit = 0.0
 
-        # decrease the volume
-        self.Vol -= dvol
+        if (not self.FixedComposition):
+            # decrease the volume
+            self.Vol -= dvol
 
-        # guard against negative volumes and a mass balance disturbance
-        if (self.Vol < 0):
-            vol_deficit = -self.Vol
-            self.Vol = 0.0
+            # guard against negative volumes and a mass balance disturbance
+            if (self.Vol < 0):
+                vol_deficit = -self.Vol
+                self.Vol = 0.0
 
         # return the volume deficit
         return vol_deficit

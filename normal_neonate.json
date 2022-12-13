@@ -677,6 +677,36 @@
       "ElBase": 400.0,
       "ElK": 0
     },
+    "VENTIN": {
+      "Name": "VENTIN",
+      "Description": "ventilator gas reservoir",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 100000000,
+      "UVol": 0,
+      "ElBase": 0.0000022,
+      "ElK": 0
+    },
+    "VENTOUT": {
+      "Name": "VENTOUT",
+      "Description": "ventilator gas out",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 100000000,
+      "UVol": 100000000,
+      "ElBase": 0.00076,
+      "ElK": 0
+    },
+    "YPIECE": {
+      "Name": "YPIECE",
+      "Description": "ventilator ypiece",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.005,
+      "UVol": 0.005,
+      "ElBase": 1000.0,
+      "ElK": 0
+    },
     "CHEST_L": {
       "Name": "CHEST_L",
       "Description": "pleural space left",
@@ -738,6 +768,45 @@
       "CompTo": "ALR",
       "RFor": 75,
       "RBack": 75,
+      "Rk": 0
+    },
+    "VENTIN_YPIECE": {
+      "Name": "VENTIN_YPIECE",
+      "Description": "ventilator to ypiece",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "VENTIN",
+      "CompTo": "YPIECE",
+      "RFor": 750,
+      "RBack": 750,
+      "Rk": 0
+    },
+    "YPIECE_VENTOUT": {
+      "Name": "YPIECE_VENTOUT",
+      "Description": "",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "YPIECE",
+      "CompTo": "VENTOUT",
+      "RFor": 25,
+      "RBack": 25,
+      "Rk": 0
+    },
+    "YPIECE_DS": {
+      "Name": "YPIECE_DS",
+      "Description": "",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "YPIECE",
+      "CompTo": "DS",
+      "RFor": 25,
+      "RBack": 25,
       "Rk": 0
     },
     "PC": {
@@ -835,7 +904,7 @@
       "IsEnabled": true,
       "PresAtm": 760,
       "InspiredAir": {
-        "Models": ["MOUTH"],
+        "Models": ["MOUTH", "YPIECE"],
         "Fh2O": 0.0223,
         "Fo2": 0.205,
         "Fco2": 0.000392,
@@ -943,17 +1012,30 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": true,
-      "InspTime": 0.4,
+      "InspTime": 0.6,
       "Freq": 35,
       "Pip": 20.0,
-      "Peep": 5.0,
-      "InspFlow": 8.0,
+      "Peep": 4.0,
+      "InspFlow": 14.0,
       "ExpFlow": 8.0,
-      "FiO2": 0.21,
-      "Temp": 37.0,
-      "Ph2O": 47.0,
+      "TempIn": 37.0,
+      "TempOut": 20.0,
       "TidalVolume": 12.0,
-      "TriggerVolume": 1.0
+      "TriggerVolume": 1.0,
+      "VentAirIn": {
+        "Models": ["VENTIN"],
+        "Fh2O": 0.0223,
+        "Fo2": 0.205,
+        "Fco2": 0.000392,
+        "Fn2": 0.772308
+      },
+      "VentAirOut": {
+        "Models": ["VENTOUT"],
+        "Fh2O": 0.0223,
+        "Fo2": 0.205,
+        "Fco2": 0.000392,
+        "Fn2": 0.772308
+      }
     },
     "ChestCompressions": {
       "Name": "ChestCompressions",
