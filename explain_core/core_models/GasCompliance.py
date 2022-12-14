@@ -4,28 +4,35 @@ from explain_core.helpers.ModelBaseClass import ModelBaseClass
 
 class GasCompliance(ModelBaseClass):
      # model specific attributes
-    Vol = 0
     UVol = 0
     ELBase = 0
     ElK = 0
 
     # state variables
     Pres = 0
-    CTotal = 0
+    Vol = 0
+    Humidity = 1.0
+    Temp = 37.0
+    TargetTemp = 37.0
+
+    Ctotal = 0
     Co2 = 0
     Cco2 = 0
     Cn2 = 0
     Ch2o = 0
+    Cother = 0
+
     Po2 = 0
     Pco2 = 0
     Pn2 = 0
     Ph2o = 0
+    Pother = 0
+
     Fo2 = 0
     Fco2 = 0
     Fn2 = 0
     Fh2o = 0
-    Temp = 20.0
-    TargetTemp = 37.0
+    Fother = 0
 
     # external parameters
     Pres0 = 0
@@ -64,8 +71,8 @@ class GasCompliance(ModelBaseClass):
             
         # change the volume as the temperature changes
         if (self.Pres != 0):
-            # as CTotal is in mmol/l we have convert it as the gas constant is in mol
-            dV = (self.CTotal * self.Vol * self.GasConstant * dT) / self.Pres
+            # as Ctotal is in mmol/l we have convert it as the gas constant is in mol
+            dV = (self.Ctotal * self.Vol * self.GasConstant * dT) / self.Pres
             self.Vol += (dV / 1000.0)
                 
             # guard against negative volumes
@@ -88,23 +95,25 @@ class GasCompliance(ModelBaseClass):
     
 
     def CalcgasComposition(self):
-        # calculate CTotal sum of all concentrations
-        self.CTotal = self.Ch2o + self.Co2 + self.Cco2 + self.Cn2
+        # calculate Ctotal sum of all concentrations
+        self.Ctotal = self.Ch2o + self.Co2 + self.Cco2 + self.Cn2
         
         # protect against division by zero
-        if self.CTotal == 0: return
+        if self.Ctotal == 0: return
         
         # calculate the partial pressures
-        self.Ph2o = (self.Ch2o / self.CTotal) * self.Pres
-        self.Po2 = (self.Co2 / self.CTotal) * self.Pres
-        self.Pco2 = (self.Cco2 / self.CTotal) * self.Pres
-        self.Pn2 = (self.Cn2 / self.CTotal) * self.Pres
+        self.Ph2o = (self.Ch2o / self.Ctotal) * self.Pres
+        self.Po2 = (self.Co2 / self.Ctotal) * self.Pres
+        self.Pco2 = (self.Cco2 / self.Ctotal) * self.Pres
+        self.Pn2 = (self.Cn2 / self.Ctotal) * self.Pres
+        self.Pother = (self.Cother / self.Ctotal) * self.Pres
 
         # calculate the fractions
-        self.Fh2o = (self.Ch2o / self.CTotal)
-        self.Fo2 = (self.Co2 / self.CTotal)
-        self.Fco2 = (self.Cco2 / self.CTotal)
-        self.Fn2 = (self.Cn2 / self.CTotal)
+        self.Fh2o = (self.Ch2o / self.Ctotal)
+        self.Fo2 = (self.Co2 / self.Ctotal)
+        self.Fco2 = (self.Cco2 / self.Ctotal)
+        self.Fn2 = (self.Cn2 / self.Ctotal)
+        self.Fother = (self.Cother / self.Ctotal)
 
     def CalcWaterVapourPressure(self, temp):
         # calculate the water vapour pressure in air depending on the temperature
@@ -122,6 +131,8 @@ class GasCompliance(ModelBaseClass):
                 self.Cco2 = 0.0
                 self.Cn2 = 0.0
                 self.Ch2o = 0.0
+                self.Cother = 0.0
+                self.Ctotal = 0.0
             else:
                 # change the gas concentrations
                 dCo2 = (modelFrom.Co2 - self.Co2) * dvol
@@ -135,6 +146,9 @@ class GasCompliance(ModelBaseClass):
 
                 dCh2o = (modelFrom.Ch2o - self.Ch2o) * dvol
                 self.Ch2o = ((self.Ch2o * self.Vol) + dCh2o) / self.Vol
+
+                dCother = (modelFrom.Cother - self.Cother) * dvol
+                self.Cother = ((self.Cother * self.Vol) + dCother) / self.Vol
 
                 # change temperature due to influx of gas
                 dTemp = (modelFrom.Temp - self.Temp) * dvol
