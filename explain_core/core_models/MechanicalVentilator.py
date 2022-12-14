@@ -1,9 +1,17 @@
+import math
+
+from explain_core.core_models.GasCompliance import GasCompliance
+from explain_core.core_models.GasResistor import GasResistor
+
 from explain_core.helpers.ModelBaseClass import ModelBaseClass
 
 class MechanicalVentilator(ModelBaseClass):
     # model specific attributes
-    VentAir = {}
-    TempSettings = {}
+    VentilatorInsp = {}
+    VentilatorExp = {}
+    TubingInsp = {}
+    TubingExp = {}
+    
     PresAtm = 760.0
     InspTime = 0.4
     ExpTime = 1.0
@@ -18,31 +26,89 @@ class MechanicalVentilator(ModelBaseClass):
     TriggerVolume = 1.0
     Inspiration = True
     Expiration = False
+    Vt_insp = 0.0
+    Vt_exp = 0.0
+    EtCo2_signal = 0.0
+    EtCo2 = 0.0
 
     # local parameters
     GasConstant = 62.36367
     _insp_timer = 0.0
     _exp_timer = 0.0
+    _vt_insp_counter = 0.0
+    _vt_exp_counter = 0.0
+    _ventin = {}
+    _out = {}
+    _tubinginsp = {}
+    _tubingexp = {}
     
 
     # override the InitModel of the model base class as this model requires additional initialization
     def InitModel(self, modelEngine):
         # initialize the base class
         ModelBaseClass.InitModel(self, modelEngine)
-        
-        # initialize the gas compliances holding the ventilator air
-        self.SetInspiredAir()
 
-        # initialize the gas compliances holding the outside air
-        self.SetOutsideAir()
+        # get a reference to all the gas compliances and gas resistors for easy access
+        self._ventin = self._modelEngine.Models["VENTIN"]
+        self._out = self._modelEngine.Models["OUT"]
+        self._tubinginsp = self._modelEngine.Models["TUBINGINSP"]
+        self._tubingexp = self._modelEngine.Models["TUBINGEXP"]
 
-        self.SetInspFlow(self.InspFlow)
+        # initialize the internal reservoir of the mechanical ventilator
+        self.SetVentIn()
 
-        # close connection 
-        self._modelEngine.Models["MOUTH_DS"].NoFlow = True
-        # self._modelEngine.Models["VENTIN_YPIECE"].NoFlow = True
-        # self._modelEngine.Models["YPIECE_VENTOUT"].NoFlow = True
-        self._modelEngine.Models["Breathing"].IsEnabled = False
+        # initialize the tubing
+
+        # initialize the outside air
+    
+    def SetVentIn(self):
+        # calculate the desired volume in internal reservoir depending on the internal pressure parameter and reservoir a elastance of 1000 mmHg/l and a reservoir unstressed volume of 5 liters
+        self._ventin.Vol = self.VentilatorInsp["InternalPressure"] / self._ventin.ElBase + self._ventin.UVol
+
+        # set the Pres0 to the atmospheric pressure 
+        self._ventin.Pres0 = self.PresAtm
+
+        # set the temperatures
+        self._ventin.Temp = self.VentilatorInsp["Temp"]
+        self._ventin.TargetTemp = self.VentilatorInsp["Temp"]
+
+        # calculate the pressure
+        self._ventin.StepModel()
+
+        # calculate the concentration at this pressure and temperature in mmol/l !
+        self._ventin.CTotal = (self._ventin.Pres / (self.GasConstant * (273.15 + self._ventin.Temp))) * 1000.0
+
+        # calculate the water vapour pressure fraction at this temperature when fully humidified
+        fh2o = (self.VentilatorInsp["Humidity"] * self.CalcWaterVapourPressure(self._ventin.Temp)) / self._ventin.Pres
+
+        # set the inspired air fractions
+        # self._ventin.Fh2O = self.VentilatorInsp["Fh2O"]
+        # self._ventin.Fo2 = self.VentilatorInsp["Fo2"]
+        # self._ventin.Fco2 = self.VentilatorInsp["Fco2"]
+        # self._ventin.Fn2 = self.VentilatorInsp["Fn2"]
+
+        # # calculate the inspired air concentrations
+        # self._ventin.Ch2O = self._ventin.Fh2O * self._ventin.CTotal
+        # self._ventin.Co2 = self._ventin.Fo2 * self._ventin.CTotal
+        # self._ventin.Cco2 = self._ventin.Fco2 * self._ventin.CTotal
+        # self._ventin.Cn2 = self._ventin.Fn2 * self._ventin.CTotal
+
+        # # calculate the inspired air partial pressures
+        # self._ventin.Ph2O = self._ventin.Fh2O * self._ventin.Pres
+        # self._ventin.Po2 = self._ventin.Fo2 * self._ventin.Pres
+        # self._ventin.Pco2 = self._ventin.Fco2 * self._ventin.Pres
+        # self._ventin.Pn2 = self._ventin.Fn2 * self._ventin.Pres
+
+
+
+    def SetVentOut(self):
+        pass
+
+    def SetTubingInsp(self):
+        pass
+
+    def SetTubingExp(self):
+        pass
 
     def CalcModel(self):
         # calculate the expiration time
@@ -55,6 +121,10 @@ class MechanicalVentilator(ModelBaseClass):
             # signal that the inspiration has ended and the expiration has started
             self.Inspiration = False
             self.Expiration = True
+            # report the vti
+            self.Vt_insp = self._vt_insp_counter
+            # reset the vti counter
+            self._vt_insp_counter = 0.0
             # close the inspiration valve and open the expiration valve
             self._modelEngine.Models["VENTIN_YPIECE"].NoFlow = True
             self._modelEngine.Models["YPIECE_VENTOUT"].NoFlow = False
@@ -66,13 +136,22 @@ class MechanicalVentilator(ModelBaseClass):
             # signal that the expiration has ended and the inspiration has started
             self.Inspiration = True
             self.Expiration = False
+            # report the vte
+            self.Vt_exp = self._vt_exp_counter
+             # report the end tidal co2
+            self.EtCo2 = self._modelEngine.Models["DS"].Pco2
+            # reset the vti counter
+            self._vt_exp_counter = 0.0
             # open the inspiration valve and close the expiration valve
             self._modelEngine.Models["VENTIN_YPIECE"].NoFlow = False
             self._modelEngine.Models["YPIECE_VENTOUT"].NoFlow = True
 
         # increase the timers
         if (self.Inspiration):
+            # increase the timer
             self._insp_timer += self._t
+            # increase the vti counter
+            self._vt_insp_counter += self._modelEngine.Models["VENTIN_YPIECE"].Flow * self._t
             # guard the pressures
             if (self._modelEngine.Models["YPIECE"].Pres > self.PresAtm + self.Pip):
                 # pressure exceeed so close the inspiration valve
@@ -82,10 +161,15 @@ class MechanicalVentilator(ModelBaseClass):
 
         if (self.Expiration):
             self._exp_timer += self._t
+            # increase the vte counter
+            self._vt_exp_counter += self._modelEngine.Models["YPIECE_VENTOUT"].Flow * self._t
+
+        # store etco2 signal
+        self.EtCo2_signal = self._modelEngine.Models["DS"].Pco2
 
     def SetInspFlow(self, flow):
         self.InspFlow = flow
-        
+
         # we assume a large pressure difference between the ventilator and the atmospheric pressure
         delta_p = self._modelEngine.Models["VENTIN"].Pres - self.PresAtm
 
@@ -143,39 +227,10 @@ class MechanicalVentilator(ModelBaseClass):
         vent_out.Pn2 = vent_out.Fn2 * vent_out.Pres
 
 
-    def SetInspiredAir(self):
-        # get a reference to the model which is going to hold the inspired air
-        vent_in = self._modelEngine.Models["VENTIN"]
 
-        vent_in.Temp = self.TempIn
-        vent_in.TargetTemp = self.TempIn
-
-        # set the atmospheric pressure 
-        vent_in.Pres0 = self.PresAtm
- 
-        # calculate the pressure in the inspired air compliance, should be pAtm
-        vent_in.StepModel()
-
-        # calculate the concentration at this pressure and temperature in mmol/l !
-        vent_in.CTotal = (vent_in.Pres / (self.GasConstant * (273.15 + vent_in.Temp))) * 1000.0
-
-        # set the inspired air fractions
-        vent_in.Fh2O = self.VentAirIn["Fh2O"]
-        vent_in.Fo2 = self.VentAirIn["Fo2"]
-        vent_in.Fco2 = self.VentAirIn["Fco2"]
-        vent_in.Fn2 = self.VentAirIn["Fn2"]
-
-        # calculate the inspired air concentrations
-        vent_in.Ch2O = vent_in.Fh2O * vent_in.CTotal
-        vent_in.Co2 = vent_in.Fo2 * vent_in.CTotal
-        vent_in.Cco2 = vent_in.Fco2 * vent_in.CTotal
-        vent_in.Cn2 = vent_in.Fn2 * vent_in.CTotal
-
-        # calculate the inspired air partial pressures
-        vent_in.Ph2O = vent_in.Fh2O * vent_in.Pres
-        vent_in.Po2 = vent_in.Fo2 * vent_in.Pres
-        vent_in.Pco2 = vent_in.Fco2 * vent_in.Pres
-        vent_in.Pn2 = vent_in.Fn2 * vent_in.Pres
+    def CalcWaterVapourPressure(self, temp):
+        # calculate the water vapour pressure in air depending on the temperature and 100% relative humidity
+        return math.pow(math.e, 20.386 - 5132 / (temp + 273))
 
 
     

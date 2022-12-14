@@ -628,7 +628,7 @@
       "Name": "IPS",
       "Description": "lung shunt",
       "ModelType": "BloodResistor",
-      "IsEnabled": true,
+      "IsEnabled": false,
       "NoFlow": false,
       "NoBackFlow": false,
       "CompFrom": "PA",
@@ -654,7 +654,7 @@
       "IsEnabled": true,
       "Vol": 0.005,
       "UVol": 0.005,
-      "ElBase": 40000,
+      "ElBase": 1500,
       "ElK": 0
     },
     "ALL": {
@@ -679,17 +679,37 @@
     },
     "VENTIN": {
       "Name": "VENTIN",
-      "Description": "ventilator gas reservoir",
+      "Description": "internal gas reservoir of the mechanical ventilator",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 100000000,
-      "UVol": 0,
-      "ElBase": 0.0000022,
+      "Vol": 5.0,
+      "UVol": 5.0,
+      "ElBase": 1000.0,
       "ElK": 0
     },
-    "VENTOUT": {
-      "Name": "VENTOUT",
-      "Description": "ventilator gas out",
+    "TUBINGINSP": {
+      "Name": "TUBINGINSP",
+      "Description": "inspiratory limb of breathing circuit of the mechanical ventilator",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.131,
+      "UVol": 0.131,
+      "ElBase": 565.0,
+      "ElK": 0
+    },
+    "TUBINGEXP": {
+      "Name": "TUBINGEXP",
+      "Description": "expiratory limb of breathing circuit of the mechanical ventilator",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.131,
+      "UVol": 0.131,
+      "ElBase": 565.0,
+      "ElK": 0
+    },
+    "OUT": {
+      "Name": "OUT",
+      "Description": "outside air",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
       "Vol": 100000000,
@@ -697,19 +717,9 @@
       "ElBase": 0.00076,
       "ElK": 0
     },
-    "YPIECE": {
-      "Name": "YPIECE",
-      "Description": "ventilator ypiece",
-      "ModelType": "GasCompliance",
-      "IsEnabled": true,
-      "Vol": 0.005,
-      "UVol": 0.005,
-      "ElBase": 1000.0,
-      "ElK": 0
-    },
     "CHEST_L": {
       "Name": "CHEST_L",
-      "Description": "pleural space left",
+      "Description": "F&P 1.6m, id 10.2mm, volume 0.131 l, compliance 1.3 ml/cmH2O",
       "ModelType": "Container",
       "IsEnabled": true,
       "ContainedModels": ["ALL"],
@@ -770,45 +780,59 @@
       "RBack": 75,
       "Rk": 0
     },
-    "VENTIN_YPIECE": {
-      "Name": "VENTIN_YPIECE",
-      "Description": "ventilator to ypiece",
+    "VENTIN_TUBINGINSP": {
+      "Name": "VENTIN_TUBINGINSP",
+      "Description": "inspiratory valve of the mechanical ventilator",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": false,
       "CompFrom": "VENTIN",
-      "CompTo": "YPIECE",
-      "RFor": 750,
-      "RBack": 750,
+      "CompTo": "TUBINGINSP",
+      "RFor": 75,
+      "RBack": 75,
       "Rk": 0
     },
-    "YPIECE_VENTOUT": {
-      "Name": "YPIECE_VENTOUT",
-      "Description": "",
+    "TUBINGINSP_DS": {
+      "Name": "TUBINGINSP_DS",
+      "Description": "connection inspiratory limb of breathing circuit of mechanical ventilator to patient",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": false,
-      "CompFrom": "YPIECE",
-      "CompTo": "VENTOUT",
-      "RFor": 25,
-      "RBack": 25,
-      "Rk": 0
-    },
-    "YPIECE_DS": {
-      "Name": "YPIECE_DS",
-      "Description": "",
-      "ModelType": "GasResistor",
-      "IsEnabled": true,
-      "NoFlow": false,
-      "NoBackFlow": false,
-      "CompFrom": "YPIECE",
+      "CompFrom": "TUBINGINSP",
       "CompTo": "DS",
-      "RFor": 25,
-      "RBack": 25,
+      "RFor": 75,
+      "RBack": 75,
       "Rk": 0
     },
+    "DS_TUBINGEXP": {
+      "Name": "DS_TUBINGEXP",
+      "Description": "connection patient to expiratory limb of breathing circuit of mechanical ventilator",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "DS",
+      "CompTo": "TUBINGEXP",
+      "RFor": 75,
+      "RBack": 75,
+      "Rk": 0
+    },
+    "TUBINGEXP_OUT": {
+      "Name": "TUBINGEXP_OUT",
+      "Description": "connection expiratory limb of breathing circuit of mechanical ventilator to the outside air",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "TUBINGEXP",
+      "CompTo": "OUT",
+      "RFor": 75,
+      "RBack": 75,
+      "Rk": 0
+    },
+
     "PC": {
       "Name": "PC",
       "Description": "pericardium",
@@ -904,7 +928,7 @@
       "IsEnabled": true,
       "PresAtm": 760,
       "InspiredAir": {
-        "Models": ["MOUTH", "YPIECE"],
+        "Models": ["MOUTH"],
         "Fh2O": 0.0223,
         "Fo2": 0.205,
         "Fco2": 0.000392,
@@ -919,7 +943,7 @@
       },
       "TempSettings": {
         "MOUTH": 20.0,
-        "DS": 32.0,
+        "DS": 37.0,
         "ALL": 37.0,
         "ALR": 37.0
       }
@@ -1012,25 +1036,37 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": true,
-      "InspTime": 0.6,
+      "InspTime": 0.4,
       "Freq": 35,
-      "Pip": 20.0,
+      "Pip": 12.0,
       "Peep": 4.0,
-      "InspFlow": 14.0,
-      "ExpFlow": 8.0,
-      "TempIn": 37.0,
-      "TempOut": 20.0,
-      "TidalVolume": 12.0,
-      "TriggerVolume": 1.0,
-      "VentAirIn": {
-        "Models": ["VENTIN"],
-        "Fh2O": 0.0223,
-        "Fo2": 0.205,
-        "Fco2": 0.000392,
-        "Fn2": 0.772308
+      "InspFlow": 12.0,
+      "VentilatorInsp": {
+        "GasCompliance": "VENTIN",
+        "InternalPressure": 200,
+        "Temp": 37.0,
+        "Humidity": 1.0,
+        "Fo2Dry": 0.205,
+        "Fco2Dry": 0.000392,
+        "Fn2Dry": 0.794608
       },
-      "VentAirOut": {
-        "Models": ["VENTOUT"],
+      "TubingInsp": {
+        "GasCompliance": "TUBINGINSP",
+        "Length": 1.6,
+        "InnerDiameter": 0.0102,
+        "Elastance": 565,
+        "Resistance": 0.07
+      },
+      "TubingExp": {
+        "GasCompliance": "TUBINGEXP",
+        "Length": 1.6,
+        "InnerDiameter": 0.0102,
+        "Elastance": 565,
+        "Resistance": 0.07
+      },
+      "VentilatorExp": {
+        "GasCompliance": ["VENTOUT"],
+        "Temp": 20.0,
         "Fh2O": 0.0223,
         "Fo2": 0.205,
         "Fco2": 0.000392,
