@@ -573,7 +573,7 @@ class Interface:
             
         if (combined == False):
           
-          fig, axs = plt.subplots(nrows=no_parameters, ncols=1, figsize=(18, 3 * no_parameters), sharex=True, sharey=sharey, constrained_layout=True)
+          fig, axs = plt.subplots(nrows=no_parameters, ncols=1, figsize=(18, 2 * no_parameters), sharex=True, sharey=sharey, constrained_layout=True)
           if (no_parameters > 1):
             for i, ax in enumerate(axs):
               ax.plot(x, y[i], self.lines[i], linewidth=1)

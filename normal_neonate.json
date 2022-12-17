@@ -654,7 +654,7 @@
       "IsEnabled": true,
       "Vol": 0.005,
       "UVol": 0.005,
-      "ElBase": 4500,
+      "ElBase": 5500,
       "ElK": 0
     },
     "ALL": {
@@ -662,9 +662,9 @@
       "Description": "alveolar left lung",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.05,
+      "Vol": 0.0475,
       "UVol": 0.0425,
-      "ElBase": 400.0,
+      "ElBase": 600.0,
       "ElK": 0
     },
     "ALR": {
@@ -672,9 +672,9 @@
       "Description": "alveolar right lung",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.05,
+      "Vol": 0.0475,
       "UVol": 0.0425,
-      "ElBase": 400.0,
+      "ElBase": 600.0,
       "ElK": 0
     },
     "VENTIN": {
@@ -688,14 +688,14 @@
       "ElK": 0,
       "FixedComposition": true
     },
-    "TUBINGIN": {
+    "TUBING": {
       "Name": "TUBINGIN",
       "Description": "inspiratory limb of the breathing circuit of the mechanical ventilator",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.131,
-      "UVol": 0.131,
-      "ElBase": 565.0,
+      "Vol": 0.262,
+      "UVol": 0.262,
+      "ElBase": 1165.0,
       "ElK": 0,
       "FixedComposition": false
     },
@@ -707,17 +707,6 @@
       "Vol": 0.011,
       "UVol": 0.011,
       "ElBase": 10000.0,
-      "ElK": 0,
-      "FixedComposition": false
-    },
-    "TUBINGOUT": {
-      "Name": "TUBINGOUT",
-      "Description": "expiratory limb of the breathing circuit of the mechanical ventilator",
-      "ModelType": "GasCompliance",
-      "IsEnabled": true,
-      "Vol": 0.131,
-      "UVol": 0.131,
-      "ElBase": 565.0,
       "ElK": 0,
       "FixedComposition": false
     },
@@ -795,28 +784,41 @@
       "RBack": 75,
       "Rk": 0
     },
-    "VENTIN_TUBINGIN": {
-      "Name": "VENTIN_TUBINGIN",
+    "VENTIN_TUBING": {
+      "Name": "VENTIN_TUBING",
       "Description": "inspiratory valve of the mechanical ventilator",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": true,
       "CompFrom": "VENTIN",
-      "CompTo": "TUBINGIN",
+      "CompTo": "TUBING",
       "RFor": 25,
       "RBack": 25,
       "Rk": 0
     },
-    "TUBINGIN_YPIECE": {
+    "TUBING_YPIECE": {
       "Name": "TUBING_YPIECE",
       "Description": "inspiratory limb of breathing circuit of mechanical ventilator to ypiece",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": false,
-      "CompFrom": "TUBINGIN",
+      "CompFrom": "TUBING",
       "CompTo": "YPIECE",
+      "RFor": 25,
+      "RBack": 25,
+      "Rk": 0
+    },
+    "TUBING_VENTOUT": {
+      "Name": "TUBING_VENTOUT",
+      "Description": "inspiratory limb of breathing circuit of mechanical ventilator to ypiece",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": true,
+      "CompFrom": "TUBING",
+      "CompTo": "VENTOUT",
       "RFor": 25,
       "RBack": 25,
       "Rk": 0
@@ -830,32 +832,6 @@
       "NoBackFlow": false,
       "CompFrom": "YPIECE",
       "CompTo": "DS",
-      "RFor": 25,
-      "RBack": 25,
-      "Rk": 0
-    },
-    "YPIECE_TUBINGOUT": {
-      "Name": "TUBINGOUT",
-      "Description": "connection ypiece mechanical ventilator to the expiratory tubing",
-      "ModelType": "GasResistor",
-      "IsEnabled": true,
-      "NoFlow": false,
-      "NoBackFlow": false,
-      "CompFrom": "YPIECE",
-      "CompTo": "TUBINGOUT",
-      "RFor": 25,
-      "RBack": 25,
-      "Rk": 0
-    },
-    "TUBINGOUT_VENTOUT": {
-      "Name": "TUBINGOUT_VENTOUT",
-      "Description": "connection expiratory tubing to expiration point of mechanical ventilator",
-      "ModelType": "GasResistor",
-      "IsEnabled": true,
-      "NoFlow": false,
-      "NoBackFlow": true,
-      "CompFrom": "TUBINGOUT",
-      "CompTo": "VENTOUT",
       "RFor": 25,
       "RBack": 25,
       "Rk": 0
@@ -1061,11 +1037,12 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": false,
-      "InspTime": 0.4,
+      "InspTime": 0.5,
       "Freq": 35,
-      "Pip": 20.0,
-      "Peep": 4.0,
-      "InspFlow": 12.0,
+      "Pip": 14.7,
+      "Peep": 3.7,
+      "InspFlow": 10.0,
+      "ExpFlow": 4.0,
       "Temp": 37.0,
       "Humidity": 1.0,
       "Fo2Dry": 0.205,
@@ -1078,22 +1055,16 @@
         "Volume": 5.0,
         "Elastance": 1000.0
       },
-      "TubingInSettings": {
-        "GasCompliance": "TUBINGIN",
+      "TubingSettings": {
+        "GasCompliance": "TUBING",
         "Length": 3.2,
         "InnerDiameter": 0.0102,
-        "Elastance": 2120.0
-      },
-      "TubingOutSettings": {
-        "GasCompliance": "TUBINGOUT",
-        "Length": 3.2,
-        "InnerDiameter": 0.0102,
-        "Elastance": 2120.0
+        "Elastance": 1120.0
       },
       "YPieceSettings": {
         "GasCompliance": "YPIECE",
         "Volume": 0.011,
-        "Elastance": 10000.0
+        "Elastance": 25000.0
       },
       "VentOutSettings": {
         "GasCompliance": "VENTOUT",
