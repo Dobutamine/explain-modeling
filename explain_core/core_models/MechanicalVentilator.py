@@ -69,12 +69,13 @@ class MechanicalVentilator(ModelBaseClass):
         self._exp_valve = self._modelEngine.Models["TUBING_VENTOUT"]
         self._flow_sensor = self._modelEngine.Models["YPIECE_DS"]
         self._pressure_sensor = self._modelEngine.Models["TUBING"]
-        self._etco2_sensor = self._modelEngine.Models["YPIECE"]
+        self._etco2_sensor = self._modelEngine.Models["DS"]
 
         self._insp_valve.IsEnabled = True
         self._exp_valve.IsEnabled = True
         self._modelEngine.Models["TUBING_YPIECE"].IsEnabled = True
         self._modelEngine.Models["YPIECE_DS"].IsEnabled = True
+        self._modelEngine.Models["YPIECE_DS"].NoFlow = False
 
         # enable the ventilator and stop the spontaneous breathing for now
         self._modelEngine.Models["Breathing"].IsEnabled = False
@@ -272,8 +273,9 @@ class MechanicalVentilator(ModelBaseClass):
     def ExpirationValveControl(self):
         # if the inspiration phase is running then the expiration valve is closed and we return
         if (self.Expiration):
-            # close the inspiration valve
-            self._insp_valve.NoFlow = True
+            # set the base flow during expiration
+            self._insp_valve.NoFlow = False
+            self.SetExpFlow(self.ExpFlow)
 
             # open the expiration valve
             self._exp_valve.NoFlow = False
@@ -285,7 +287,24 @@ class MechanicalVentilator(ModelBaseClass):
             if (self._pressure_sensor.Pres < self.Peep + self.PresAtm):
                 self._exp_valve.NoFlow = True
  
+    def SetExpFlow(self, flow):
 
+        # we assume a large pressure difference between the ventilator and the atmospheric pressure
+        delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres
+
+        # flow = dp / R, R = dp / flow
+        # calculate flow in l/s 
+        flow_ls = flow / 60.0
+
+        # calculate inspiratory valve resistance
+        res = (delta_p / flow_ls) - self._exp_valve.RFor
+
+        if (res > 0):
+            # set inspiratory valve resistance
+            self._insp_valve.RFor = res
+            self._insp_valve.RBack = res
+
+        return res
 
     def SetInspFlow(self, flow):
 

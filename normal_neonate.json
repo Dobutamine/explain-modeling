@@ -894,7 +894,7 @@
       "Description": "Metabolism model",
       "ModelType": "Metabolism",
       "IsEnabled": true,
-      "Vo2": 10.8,
+      "Vo2": 7.5,
       "RespQ": 0.8,
       "BodyTemp": 37.0,
       "MetabolicActiveModels": {
@@ -1037,7 +1037,7 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": false,
-      "InspTime": 0.5,
+      "InspTime": 0.4,
       "Freq": 35,
       "Pip": 14.7,
       "Peep": 3.7,
