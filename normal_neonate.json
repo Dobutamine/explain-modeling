@@ -662,9 +662,9 @@
       "Description": "alveolar left lung",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.0475,
+      "Vol": 0.0465,
       "UVol": 0.0425,
-      "ElBase": 600.0,
+      "ElBase": 750.0,
       "ElK": 0
     },
     "ALR": {
@@ -672,9 +672,9 @@
       "Description": "alveolar right lung",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.0475,
+      "Vol": 0.0465,
       "UVol": 0.0425,
-      "ElBase": 600.0,
+      "ElBase": 750.0,
       "ElK": 0
     },
     "VENTIN": {
@@ -688,14 +688,25 @@
       "ElK": 0,
       "FixedComposition": true
     },
-    "TUBING": {
+    "TUBINGIN": {
       "Name": "TUBINGIN",
       "Description": "inspiratory limb of the breathing circuit of the mechanical ventilator",
       "ModelType": "GasCompliance",
       "IsEnabled": true,
-      "Vol": 0.262,
-      "UVol": 0.262,
-      "ElBase": 1165.0,
+      "Vol": 0.131,
+      "UVol": 0.131,
+      "ElBase": 1160.0,
+      "ElK": 0,
+      "FixedComposition": false
+    },
+    "TUBINGOUT": {
+      "Name": "TUBINGOUT",
+      "Description": "expiratory limb of the breathing circuit of the mechanical ventilator",
+      "ModelType": "GasCompliance",
+      "IsEnabled": true,
+      "Vol": 0.131,
+      "UVol": 0.131,
+      "ElBase": 1160.0,
       "ElK": 0,
       "FixedComposition": false
     },
@@ -784,56 +795,69 @@
       "RBack": 75,
       "Rk": 0
     },
-    "VENTIN_TUBING": {
-      "Name": "VENTIN_TUBING",
+    "VENTIN_TUBINGIN": {
+      "Name": "VENTIN_TUBINGIN",
       "Description": "inspiratory valve of the mechanical ventilator",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": true,
       "CompFrom": "VENTIN",
-      "CompTo": "TUBING",
-      "RFor": 25,
-      "RBack": 25,
+      "CompTo": "TUBINGIN",
+      "RFor": 45,
+      "RBack": 45,
       "Rk": 0
     },
-    "TUBING_YPIECE": {
-      "Name": "TUBING_YPIECE",
+    "TUBINGIN_YPIECE": {
+      "Name": "TUBINGIN_YPIECE",
       "Description": "inspiratory limb of breathing circuit of mechanical ventilator to ypiece",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": false,
-      "CompFrom": "TUBING",
+      "CompFrom": "TUBINGIN",
       "CompTo": "YPIECE",
       "RFor": 25,
       "RBack": 25,
       "Rk": 0
     },
-    "TUBING_VENTOUT": {
-      "Name": "TUBING_VENTOUT",
+    "YPIECE_TUBINGOUT": {
+      "Name": "YPIECE_TUBINGOUT",
+      "Description": "inspiratory limb of breathing circuit of mechanical ventilator to ypiece",
+      "ModelType": "GasResistor",
+      "IsEnabled": true,
+      "NoFlow": false,
+      "NoBackFlow": false,
+      "CompFrom": "YPIECE",
+      "CompTo": "TUBINGOUT",
+      "RFor": 25,
+      "RBack": 25,
+      "Rk": 0
+    },
+    "TUBINGOUT_VENTOUT": {
+      "Name": "TUBINGOUT_VENTOUT",
       "Description": "inspiratory limb of breathing circuit of mechanical ventilator to ypiece",
       "ModelType": "GasResistor",
       "IsEnabled": true,
       "NoFlow": false,
       "NoBackFlow": true,
-      "CompFrom": "TUBING",
+      "CompFrom": "TUBINGOUT",
       "CompTo": "VENTOUT",
-      "RFor": 25,
-      "RBack": 25,
+      "RFor": 10,
+      "RBack": 10,
       "Rk": 0
     },
     "YPIECE_DS": {
       "Name": "YPIECE_DS",
       "Description": "ypiece of mechanical ventilator to patient",
       "ModelType": "GasResistor",
-      "IsEnabled": true,
-      "NoFlow": false,
+      "IsEnabled": false,
+      "NoFlow": true,
       "NoBackFlow": false,
       "CompFrom": "YPIECE",
       "CompTo": "DS",
-      "RFor": 25,
-      "RBack": 25,
+      "RFor": 45,
+      "RBack": 45,
       "Rk": 0
     },
     "PC": {
@@ -1050,24 +1074,24 @@
       "Fn2Dry": 0.794608,
       "FotherDry": 0.0,
       "VentInSettings": {
-        "GasCompliance": "VENTIN",
+        "GasCompliance": ["VENTIN"],
         "InternalPressure": 200,
-        "Volume": 5.0,
+        "Volume": 1000000.0,
         "Elastance": 1000.0
       },
       "TubingSettings": {
-        "GasCompliance": "TUBING",
-        "Length": 3.2,
+        "GasCompliance": ["TUBINGIN", "TUBINGOUT"],
+        "Length": 1.6,
         "InnerDiameter": 0.0102,
-        "Elastance": 1120.0
+        "Elastance": 1160.0
       },
       "YPieceSettings": {
-        "GasCompliance": "YPIECE",
+        "GasCompliance": ["YPIECE"],
         "Volume": 0.011,
         "Elastance": 25000.0
       },
       "VentOutSettings": {
-        "GasCompliance": "VENTOUT",
+        "GasCompliance": ["VENTOUT"],
         "InternalPressure": 4.0,
         "Volume": 1000000.0,
         "Elastance": 1.0,

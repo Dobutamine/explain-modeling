@@ -27,6 +27,15 @@ class Breathing(ModelBaseClass):
     _ncc_exp = 0
     _breath_timer = 0.0
     
+    def SwitchBreathing(self, state):
+        if state:
+            self.IsEnabled = True
+            self._modelEngine.Models["MOUTH_DS"].IsEnabled = True
+            self._modelEngine.Models["MOUTH_DS"].NoFlow = False
+        else:
+            self.IsEnabled = False
+            self._modelEngine.Models["MOUTH_DS"].IsEnabled = False
+            self._modelEngine.Models["MOUTH_DS"].NoFlow = True
 
     def CalcModel(self):
         # calculate the respiratory rate and target tidal volume from the target minute volume

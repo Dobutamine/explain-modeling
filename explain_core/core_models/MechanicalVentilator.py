@@ -37,7 +37,8 @@ class MechanicalVentilator(ModelBaseClass):
     Fco2Dry = 0.0
     Fn2Dry = 0.0
     FotherDry = 0.0
-    
+    EtRes = 37.9
+
     # local parameters
     _insp_timer = 0.0
     _exp_timer = 0.0
@@ -45,13 +46,17 @@ class MechanicalVentilator(ModelBaseClass):
     _vt_exp_counter = 0.0
     _ventin = {}
     _ventout = {}
-    _tubing = {}
+    _tubingin = {}
+    _tubingout = {}
     _ypiece = {}
     _insp_valve = {}
     _exp_valve = {}
     _flow_sensor = {}
     _pressure_sensor = {}
+    _internal_pressure_sensor = {}
     _etco2_sensor = {}
+    _insp_valve_flow_reduction = 1.0
+    _reductor = 1.0
 
     ic = 1.0
 
@@ -63,42 +68,44 @@ class MechanicalVentilator(ModelBaseClass):
         # get a reference to all the gas compliances and gas resistors for easy access
         self._ventin = self._modelEngine.Models["VENTIN"]
         self._ventout = self._modelEngine.Models["VENTOUT"]
-        self._tubing = self._modelEngine.Models["TUBING"]
+        self._tubingin = self._modelEngine.Models["TUBINGIN"]
+        self._tubingout = self._modelEngine.Models["TUBINGOUT"]
         self._ypiece = self._modelEngine.Models["YPIECE"]
-        self._insp_valve = self._modelEngine.Models["VENTIN_TUBING"]
-        self._exp_valve = self._modelEngine.Models["TUBING_VENTOUT"]
+        self._insp_valve = self._modelEngine.Models["VENTIN_TUBINGIN"]
+        self._exp_valve = self._modelEngine.Models["TUBINGOUT_VENTOUT"]
         self._flow_sensor = self._modelEngine.Models["YPIECE_DS"]
-        self._pressure_sensor = self._modelEngine.Models["TUBING"]
+        self._pressure_sensor = self._modelEngine.Models["YPIECE"]
+        self._internal_pressure_sensor = self._modelEngine.Models["TUBINGIN"]
+
         self._etco2_sensor = self._modelEngine.Models["DS"]
-
-        self._insp_valve.IsEnabled = True
-        self._exp_valve.IsEnabled = True
-        self._modelEngine.Models["TUBING_YPIECE"].IsEnabled = True
-        self._modelEngine.Models["YPIECE_DS"].IsEnabled = True
-        self._modelEngine.Models["YPIECE_DS"].NoFlow = False
-
-        # enable the ventilator and stop the spontaneous breathing for now
-        self._modelEngine.Models["Breathing"].IsEnabled = False
-        self._modelEngine.Models["MOUTH_DS"].NoFlow = True
-        self._modelEngine.Models["MOUTH_DS"].IsEnabled = False
 
         # initialize the internal reservoir of the mechanical ventilator
         self.SetVentIn()
         
-        # initialize the tubing
+        # initialize the tubing 
         self.SetTubing()
+
+        # initialize the Y-piece
         self.SetYPiece()
 
         # set the expiratory reservoir
         self.SetVentOut()
 
-        # set the inspiratory flow
-        self.SetInspFlow(self.InspFlow)
-
-       
-        self.IsEnabled = True
-        
+        # set the initial state of the in- and expiratory valves
+        self.ValveControlPressureControl()
     
+    def SwitchVentilator(self, state):
+        # turn on or turn off the ventilator
+        if state:
+            self.IsEnabled = True
+            self._modelEngine.Models["YPIECE_DS"].IsEnabled = True
+            self._modelEngine.Models["YPIECE_DS"].NoFlow = False
+        else:
+            self.IsEnabled = False
+            self._modelEngine.Models["YPIECE_DS"].IsEnabled = False
+            self._modelEngine.Models["YPIECE_DS"].NoFlow = True
+
+
     def SetYPiece(self):
         # set the humidity and temperature of the internal reservoir
         self._ypiece.Humidity = self.Humidity
@@ -165,21 +172,38 @@ class MechanicalVentilator(ModelBaseClass):
 
     def SetTubing(self):
         # set the humidity, temperature and atmospheric pressure of the tubing
-        self._tubing.Humidity = self.Humidity
-        self._tubing.Temp = self.Temp
-        self._tubing.TargetTemp = self.Temp
-        self._tubing.Pres0 = self.PresAtm
+        self._tubingin.Humidity = self.Humidity
+        self._tubingin.Temp = self.Temp
+        self._tubingin.TargetTemp = self.Temp
+        self._tubingin.Pres0 = self.PresAtm
 
         # calculate the volume and unstressed volume of the tubing
-        self._tubing.Vol = math.pi * (math.pow(self.TubingSettings["InnerDiameter"], 2) / 4.0) * self.TubingSettings["Length"] * 1000.0
-        self._tubing.UVol = self._tubing.Vol
-        self._tubing.ElBase = self.TubingSettings["Elastance"]
+        self._tubingin.Vol = math.pi * (math.pow(self.TubingSettings["InnerDiameter"], 2) / 4.0) * self.TubingSettings["Length"] * 1000.0
+        self._tubingin.UVol = self._tubingin.Vol
+        self._tubingin.ElBase = self.TubingSettings["Elastance"]
 
         # calculate the pressures
-        self._tubing.StepModel()
+        self._tubingin.StepModel()
 
         # set the air composition
-        SetAirComposition(self._tubing, self.Humidity, self.Temp, self.Fo2Dry, self.Fco2Dry, self.Fn2Dry, self.FotherDry)
+        SetAirComposition(self._tubingin, self.Humidity, self.Temp, self.Fo2Dry, self.Fco2Dry, self.Fn2Dry, self.FotherDry)
+
+        # set the humidity, temperature and atmospheric pressure of the tubing
+        self._tubingout.Humidity = self.Humidity
+        self._tubingout.Temp = self.Temp
+        self._tubingout.TargetTemp = self.Temp
+        self._tubingout.Pres0 = self.PresAtm
+
+        # calculate the volume and unstressed volume of the tubing
+        self._tubingout.Vol = math.pi * (math.pow(self.TubingSettings["InnerDiameter"], 2) / 4.0) * self.TubingSettings["Length"] * 1000.0
+        self._tubingout.UVol = self._tubingout.Vol
+        self._tubingout.ElBase = self.TubingSettings["Elastance"]
+
+        # calculate the pressures
+        self._tubingout.StepModel()
+
+        # set the air composition
+        SetAirComposition(self._tubingout, self.Humidity, self.Temp, self.Fo2Dry, self.Fco2Dry, self.Fn2Dry, self.FotherDry)
 
     def CalcModel(self):
         # calculate the expiration time
@@ -233,97 +257,101 @@ class MechanicalVentilator(ModelBaseClass):
         # store etco2 signal
         self.EtCo2_signal = self._etco2_sensor.Pco2
         self.Flow = self._flow_sensor.Flow * 60.0                                           # convert to l/min
-        self.Pressure = (self._modelEngine.Models["YPIECE"].Pres - self.PresAtm) * 1.35951  # convert to cmH2O relative to atmospheric pressure
+        self.Pressure = (self._pressure_sensor.Pres - self.PresAtm) * 1.35951  # convert to cmH2O relative to atmospheric pressure
         self.Volume += (self._flow_sensor.Flow * self._t) * 1000.0                          # convert to ml
         
+        # calculate the endotracheal tube resistance
+        self.EtTubeResistance(self.Flow)
+ 
         # control the in- and expiration valve
-        self.InspirationValveControl()
-        self.ExpirationValveControl()
+        self.ValveControlPressureControl()
+
         
-    def BlowOffPressure(self):
-        pres = self._tubingin.Pres
-        target_pres = self.Pip + self.PresAtm
-        # calculate the volume to lose
-        dvol = (pres - target_pres) / self._tubingin.ElBase
-        self._tubingin.VolumeOut(dvol)
+    
+    def EtTubeResistance(self, flow):
+        res5 = 37.9
+        res10 = 57.3
 
-    def InspirationValveControl(self):
-        # if the expiration phase then the inspiration valve closed and we return
-        if (self.Inspiration):
-            # calculate the inspiratory flow
-            res = self.SetInspFlow(self.InspFlow * self.ic)
+        a = (10.0 - 5.0) / ((res10 - res5) * 0.735559)
+        b = res5 * 0.735559 - a * 5.0
 
-            # close the expiration valve
-            self._exp_valve.NoFlow = True
+        if abs(flow) < 0.5:
+            flow = 0.5
 
-            # open the inspiration valve
+        self.EtRes = abs(flow) * a + b
+
+        self._modelEngine.Models["YPIECE_DS"].RFor = self.EtRes
+        self._modelEngine.Models["YPIECE_DS"].RBack = self.EtRes
+
+
+
+
+    def ValveControlPressureControl(self):
+        if self.Inspiration:
+            # calculate endotracheal tube resistance depending on the actual flow
+            
+
+            # calculate the inspiratory valve resistance to achieve the desired inspiratory flow
+
+            # pressure gradient over the respiratory system
+            delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres
+            
+            # calculate the resistance of the inspiratory valve
+            if (self._insp_valve_flow_reduction <= 0.0):
+                res = 100000000000
+            else:
+                res = (delta_p / ((self.InspFlow * self._insp_valve_flow_reduction) / 60.0)) - self._exp_valve.RFor - 50.0
+
+            # set the inspiratory valve resistance
+            self._insp_valve.RFor = res
+
+            # make sure the valve is open and make sure no backflow can occur
             self._insp_valve.NoFlow = False
-
-            # make sure no backflow can occur
             self._insp_valve.NoBackflow = True
 
-            # # now we have to determine the resistance of the inspiration valve depending on the inspiratory flow setting
-            delta = self._pressure_sensor.Pres - self.Pip + self.PresAtm
-            
-            self.ic = 1.0
+            # close the expiratory valve
+            self._exp_valve.NoFlow = True
 
-            if (self._pressure_sensor.Pres > self.Pip + self.PresAtm):
+            threshold = self.Pip + self.PresAtm + 1.0
+            threshold80 = (0.85 * self.Pip) + self.PresAtm
+            # start reducing the flow when the pressure is nearing the threshold
+            if (self._internal_pressure_sensor.Pres >= threshold80):
+                # calculate the percentage difference between the threshold and the current pressure
+                self._insp_valve_flow_reduction = self._reductor + (threshold80 - self._internal_pressure_sensor.Pres) / (threshold - threshold80)
+
+            self._insp_valve_flow_reduction = 1.0
+            if (self._internal_pressure_sensor.Pres >= threshold):
                 self._insp_valve.NoFlow = True
 
-    def ExpirationValveControl(self):
-        # if the inspiration phase is running then the expiration valve is closed and we return
-        if (self.Expiration):
-            # set the base flow during expiration
+
+        if self.Expiration:
+            # calculate the inspiratory valve resistance to achieve the desired expiratory flow
+            self._insp_valve_flow_reduction = 1.0
+
+            # pressure gradient over the respiratory system
+            delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres
+
+            # calculate the resistance of the inspiratory valve
+            res = (delta_p / (self.ExpFlow / 60.0)) - self._exp_valve.RFor - 50.0
+
+            # set the inspiratory valve resistance
+            self._insp_valve.RFor = res
+
+            # make sure the valve is open and make sure no backflow can occur
             self._insp_valve.NoFlow = False
-            self.SetExpFlow(self.ExpFlow)
+            self._insp_valve.NoBackflow = True
 
-            # open the expiration valve
+            # make sure the expiratory valve is open and make sure no backflow can occur
+            self._exp_valve.RFor = 25.0
             self._exp_valve.NoFlow = False
-            self._exp_valve.RFor = 10.0
-
-            # make sure no backflow can occur
             self._exp_valve.NoBackflow = True
 
+            # guard the positive end expiratory pressure
             if (self._pressure_sensor.Pres < self.Peep + self.PresAtm):
+                # close the expiration valve when the pressure falls below the positive end expiratory pressure
                 self._exp_valve.NoFlow = True
- 
-    def SetExpFlow(self, flow):
 
-        # we assume a large pressure difference between the ventilator and the atmospheric pressure
-        delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres
 
-        # flow = dp / R, R = dp / flow
-        # calculate flow in l/s 
-        flow_ls = flow / 60.0
-
-        # calculate inspiratory valve resistance
-        res = (delta_p / flow_ls) - self._exp_valve.RFor
-
-        if (res > 0):
-            # set inspiratory valve resistance
-            self._insp_valve.RFor = res
-            self._insp_valve.RBack = res
-
-        return res
-
-    def SetInspFlow(self, flow):
-
-        # we assume a large pressure difference between the ventilator and the atmospheric pressure
-        delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres
-
-        # flow = dp / R, R = dp / flow
-        # calculate flow in l/s 
-        flow_ls = flow / 60.0
-
-        # calculate inspiratory valve resistance
-        res = (delta_p / flow_ls) - self._exp_valve.RFor
-
-        if (res > 0):
-            # set inspiratory valve resistance
-            self._insp_valve.RFor = res
-            self._insp_valve.RBack = res
-
-        return res
 
 
 
