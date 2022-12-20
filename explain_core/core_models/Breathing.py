@@ -98,7 +98,7 @@ class Breathing(ModelBaseClass):
 
         # transfer muscle pressure to the targets
         for target in self.Targets:
-            self._modelEngine.Models[target].PresExt = self.RespMusclePressure
+            self._modelEngine.Models[target].PresExt = -self.RespMusclePressure
 
     
     def CalcRespMusclePressure(self):

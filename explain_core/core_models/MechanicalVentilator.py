@@ -14,19 +14,22 @@ class MechanicalVentilator(ModelBaseClass):
     PresAtm = 760.0
     InspTime = 0.4
     Freq = 35
+    VtSet = 0.015
     Pip = 20.0
+    PipMax = 30.0
     Peep = 5.0
     InspFlow = 8.0
     ExpFlow = 3.0
     Temp = 37.0
     Humidity = 1.0
     GasConstant = 62.36367
+    VolumeGuaranteed = False
 
     # model dependent parameters
     Inspiration = True
     Expiration = False
-    Vt_insp = 0.0
-    Vt_exp = 0.0
+    VtInsp = 0.0
+    VtExp = 0.0
     EtCo2_signal = 0.0
     EtCo2 = 0.0
     ExpTime = 1.0
@@ -54,11 +57,10 @@ class MechanicalVentilator(ModelBaseClass):
     _flow_sensor = {}
     _pressure_sensor = {}
     _internal_pressure_sensor = {}
+    _internal_volume_counter = 0
     _etco2_sensor = {}
     _insp_valve_flow_reduction = 1.0
-    _reductor = 1.0
 
-    ic = 1.0
 
     # override the InitModel of the model base class as this model requires additional initialization
     def InitModel(self, modelEngine):
@@ -76,7 +78,7 @@ class MechanicalVentilator(ModelBaseClass):
         self._flow_sensor = self._modelEngine.Models["YPIECE_DS"]
         self._pressure_sensor = self._modelEngine.Models["YPIECE"]
         self._internal_pressure_sensor = self._modelEngine.Models["TUBINGIN"]
-
+        self._internal_flow_sensor = self._modelEngine.Models["VENTIN_TUBINGIN"]
         self._etco2_sensor = self._modelEngine.Models["DS"]
 
         # initialize the internal reservoir of the mechanical ventilator
@@ -92,7 +94,7 @@ class MechanicalVentilator(ModelBaseClass):
         self.SetVentOut()
 
         # set the initial state of the in- and expiratory valves
-        self.ValveControlPressureControl()
+        self.PressureLimited()
     
     def SwitchVentilator(self, state):
         # turn on or turn off the ventilator
@@ -215,11 +217,9 @@ class MechanicalVentilator(ModelBaseClass):
             self._insp_timer = 0.0
             # signal that the inspiration has ended and the expiration has started
             self.Inspiration = False
-            self.ic = 1.0
             self.Expiration = True
-
             # report the vti
-            self.Vt_insp = self._vt_insp_counter
+            self.VtInsp = self._vt_insp_counter
             # reset the vti counter
             self._vt_insp_counter = 0.0
             
@@ -232,13 +232,17 @@ class MechanicalVentilator(ModelBaseClass):
             self.Inspiration = True
             self.Expiration = False
             # report the vte
-            self.Vt_exp = self._vt_exp_counter
+            self.VtExp = self._vt_exp_counter
+            # change pip when in prvc mode
+            if (self.VolumeGuaranteed):
+                self.PressureRegulatedVolumeControl()
              # report the end tidal co2
             self.EtCo2 = self._etco2_sensor.Pco2
             # reset the vti counter
             self._vt_exp_counter = 0.0
             # reset the volume counter
             self.Volume = 0.0
+        
             
 
         # increase the timers
@@ -253,7 +257,6 @@ class MechanicalVentilator(ModelBaseClass):
             # increase the vte counter
             self._vt_exp_counter += -self._flow_sensor.Flow * self._t
 
-
         # store etco2 signal
         self.EtCo2_signal = self._etco2_sensor.Pco2
         self.Flow = self._flow_sensor.Flow * 60.0                                           # convert to l/min
@@ -263,11 +266,11 @@ class MechanicalVentilator(ModelBaseClass):
         # calculate the endotracheal tube resistance
         self.EtTubeResistance(self.Flow)
  
-        # control the in- and expiration valve
-        self.ValveControlPressureControl()
+       
 
+
+        self.PressureLimited()
         
-    
     def EtTubeResistance(self, flow):
         res5 = 37.9
         res10 = 57.3
@@ -283,14 +286,27 @@ class MechanicalVentilator(ModelBaseClass):
         self._modelEngine.Models["YPIECE_DS"].RFor = self.EtRes
         self._modelEngine.Models["YPIECE_DS"].RBack = self.EtRes
 
+    def PressureRegulatedVolumeControl(self):
+        # is the tidal volume reached
+        if (self.VtExp > self.VtSet + 0.001):
+            # decrease pip 
+            self.Pip -= 1.0
+            # guard against too low pip
+            if ((self.Pip - self.Peep) < 4.0):
+                self.Pip = self.Peep + 4.0
+        if (self.VtExp < self.VtSet - 0.001):
+            # increase pip
+            self.Pip += 1.0
+            # guard against too high pip
+            if (self.Pip > self.PipMax):
+                self.Pip = self.PipMax
 
+    
+    def VolumeControl(self):
+        pass
 
-
-    def ValveControlPressureControl(self):
+    def PressureLimited(self):
         if self.Inspiration:
-            # calculate endotracheal tube resistance depending on the actual flow
-            
-
             # calculate the inspiratory valve resistance to achieve the desired inspiratory flow
 
             # pressure gradient over the respiratory system
@@ -300,7 +316,7 @@ class MechanicalVentilator(ModelBaseClass):
             if (self._insp_valve_flow_reduction <= 0.0):
                 res = 100000000000
             else:
-                res = (delta_p / ((self.InspFlow * self._insp_valve_flow_reduction) / 60.0)) - self._exp_valve.RFor - 50.0
+                res = (delta_p / (self.InspFlow / 60.0)) - self._exp_valve.RFor - 50.0
 
             # set the inspiratory valve resistance
             self._insp_valve.RFor = res
@@ -313,20 +329,12 @@ class MechanicalVentilator(ModelBaseClass):
             self._exp_valve.NoFlow = True
 
             threshold = self.Pip + self.PresAtm + 1.0
-            threshold80 = (0.85 * self.Pip) + self.PresAtm
-            # start reducing the flow when the pressure is nearing the threshold
-            if (self._internal_pressure_sensor.Pres >= threshold80):
-                # calculate the percentage difference between the threshold and the current pressure
-                self._insp_valve_flow_reduction = self._reductor + (threshold80 - self._internal_pressure_sensor.Pres) / (threshold - threshold80)
-
-            self._insp_valve_flow_reduction = 1.0
             if (self._internal_pressure_sensor.Pres >= threshold):
                 self._insp_valve.NoFlow = True
 
 
         if self.Expiration:
-            # calculate the inspiratory valve resistance to achieve the desired expiratory flow
-            self._insp_valve_flow_reduction = 1.0
+            # calculate the inspiratory valve resistance to achieve the desired expiratory bias flow
 
             # pressure gradient over the respiratory system
             delta_p = self._modelEngine.Models["VENTIN"].Pres - self._modelEngine.Models["VENTOUT"].Pres

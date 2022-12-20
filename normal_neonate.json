@@ -778,8 +778,8 @@
       "NoBackFlow": false,
       "CompFrom": "DS",
       "CompTo": "ALL",
-      "RFor": 75,
-      "RBack": 75,
+      "RFor": 100,
+      "RBack": 100,
       "Rk": 0
     },
     "DS_ALR": {
@@ -791,8 +791,8 @@
       "NoBackFlow": false,
       "CompFrom": "DS",
       "CompTo": "ALR",
-      "RFor": 75,
-      "RBack": 75,
+      "RFor": 100,
+      "RBack": 100,
       "Rk": 0
     },
     "VENTIN_TUBINGIN": {
@@ -918,7 +918,7 @@
       "Description": "Metabolism model",
       "ModelType": "Metabolism",
       "IsEnabled": true,
-      "Vo2": 7.5,
+      "Vo2": 8.5,
       "RespQ": 0.8,
       "BodyTemp": 37.0,
       "MetabolicActiveModels": {
@@ -1061,6 +1061,9 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": false,
+      "VolumeGuaranteed": true,
+      "PipMax": 30.0,
+      "VtSet": 0.015,
       "InspTime": 0.4,
       "Freq": 35,
       "Pip": 14.7,
