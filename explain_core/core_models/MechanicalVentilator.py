@@ -223,7 +223,6 @@ class MechanicalVentilator(ModelBaseClass):
             # reset the vti counter
             self._vt_insp_counter = 0.0
             
-        
         # has the expiration time elapsed
         if (self._exp_timer > self.ExpTime):
             # reset the expiration timer
@@ -243,8 +242,6 @@ class MechanicalVentilator(ModelBaseClass):
             # reset the volume counter
             self.Volume = 0.0
         
-            
-
         # increase the timers
         if (self.Inspiration):
             # increase the timer
@@ -266,9 +263,6 @@ class MechanicalVentilator(ModelBaseClass):
         # calculate the endotracheal tube resistance
         self.EtTubeResistance(self.Flow)
  
-       
-
-
         self.PressureLimited()
         
     def EtTubeResistance(self, flow):
@@ -300,7 +294,6 @@ class MechanicalVentilator(ModelBaseClass):
             # guard against too high pip
             if (self.Pip > self.PipMax):
                 self.Pip = self.PipMax
-
     
     def VolumeControl(self):
         pass
@@ -359,11 +352,54 @@ class MechanicalVentilator(ModelBaseClass):
                 # close the expiration valve when the pressure falls below the positive end expiratory pressure
                 self._exp_valve.NoFlow = True
 
+    def SetInspTime(self, time):
+        self.InspTime = time
 
+    def SetFreq(self, freq):
+        self.Freq = freq
 
+    def SetInspFlow(self, flow):
+        self.InspFlow = flow
 
+    def SetExpFlow(self, flow):
+        self.ExpFlow = flow
 
+    def SetFiO2(self, fio2):
+        self.Fo2Dry = fio2
+    
+    def SetPip(self, pip):
+        self.Pip = pip / 1.35951
+    
+    def SetPeep(self, peep):
+        self.Peep = peep / 1.35951
 
+    def SetTemp(self, temp):
+        self.Temp = temp
+
+    def SetHumidity(self, humidity):
+        self.Humidity = humidity
+
+    def SetTargetVt(self, vt):
+        self.VtSet = vt / 1000.0
+    
+    def SetMode(self, mode):
+        if (mode == "PC"):
+            self.VolumeGuaranteed = False
+
+        if (mode == "PRVC"):
+            self.VolumeGuaranteed = True
+ 
+    def SetTubingDiameter(self, diameter):
+        self.TubingSettings["InnerDiameter"] = diameter / 1000.0
+
+    def SetTubingLength(self, length):
+        self.TubingSettings["Length"] = length
+
+    def SetTubingCompliance(self, comp):
+        self.TubingSettings["Elastance"] = 1.0 / comp
+
+    def SetTubeSize(self, tube_size):
+        pass
 
 
 

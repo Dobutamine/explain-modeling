@@ -44,8 +44,6 @@ class GasCompliance(ModelBaseClass):
     # local parameters
     GasConstant = 62.36367
 
-
-
     def CalcModel(self):
         # add heat to the gas 
         self.AddHeat()
@@ -62,7 +60,7 @@ class GasCompliance(ModelBaseClass):
         self.PresMus = 0.0
 
         # calculate the new gas composition
-        self.CalcgasComposition()
+        self.CalcGasComposition()
 
     def AddHeat(self):
         # calculate a temperature change depending on the target temperature and the current temperature
@@ -94,7 +92,7 @@ class GasCompliance(ModelBaseClass):
             self.Vol += (((self.GasConstant * (273.15 + self.Temp)) / self.Pres) * (dH2O / 1000.0))
     
 
-    def CalcgasComposition(self):
+    def CalcGasComposition(self):
         # calculate Ctotal sum of all concentrations
         self.Ctotal = self.Ch2o + self.Co2 + self.Cco2 + self.Cn2
         

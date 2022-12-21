@@ -1111,6 +1111,22 @@
       "Description": "",
       "ModelType": "ChestCompressions",
       "IsEnabled": true
+    },
+    "Pda": {
+      "Name": "Pda",
+      "Description": "",
+      "ModelType": "Pda",
+      "IsEnabled": false,
+      "Model": "DA",
+      "Length": 10.0,
+      "Diameter": 5.1,
+      "Viscosity": 3.5
+    },
+    "IntrathoracicPressure": {
+      "Name": "IntrathoracicPressure",
+      "Description": "",
+      "ModelType": "IntrathoracicPressure",
+      "IsEnabled": false
     }
   }
 }

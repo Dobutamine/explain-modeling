@@ -27,6 +27,7 @@ class ModelBaseClass:
     Description = ""
     ModelType = ""
     IsEnabled = False
+    Description = ""
 
     # common local parameters
     _modelEngine = {}
