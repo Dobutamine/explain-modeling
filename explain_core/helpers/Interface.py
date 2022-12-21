@@ -29,6 +29,10 @@ class Interface:
         
         self.output_path = str(os.path.join(Path().absolute())) + r'/'
     
+    def calculate(self, time_to_calculate = 10):
+        self._modelEngine.Calculate(time_to_calculate)
+
+    # property setters and getters
     def process_prop_changes(self):
         # process the propchanges
         if (self.prop_update_counter >= self.prop_update_interval):
@@ -40,7 +44,6 @@ class Interface:
 
         self.prop_update_counter += self.t
         
-    # property setters and getters
     def set_property(self, prop, new_value, in_time = 0, at_time = 0):
         prop = self.find_model_prop(prop)
         if (prop != None):
@@ -76,15 +79,15 @@ class Interface:
         return None    
     
      # getters
-    def get_vitals(self, time_to_calculate = 10):
+    def get_vitals(self, aorta = "AA", right_atrium = "RA", pulmonary_artery = "PA"):
         vitals = {
             "heartrate": self._modelEngine.Models['Heart'].HeartRate,
-            "spo2": self._modelEngine.Models['AA'].So2,
-            # "abp_systole": self._modelEngine.Models['AA'].systole,
-            # "abp_diastole": self._modelEngine.Models['AA'].diastole,
-            # "pap_systole": self._modelEngine.Models['PA'].systole,
-            # "pap_diastole": self._modelEngine.Models['PA'].diastole,
-            # "cvp": (2 * self._modelEngine.Models['RA'].diastole + self._modelEngine.Models['RA'].systole) / 3,
+            "spo2": self._modelEngine.Models[aorta].So2,
+            "abp_systole": self._modelEngine.Models[aorta].PresMax,
+            "abp_diastole": self._modelEngine.Models[aorta].PresMin,
+            "pap_systole": self._modelEngine.Models[pulmonary_artery].PresMax,
+            "pap_diastole": self._modelEngine.Models[pulmonary_artery].PresMin,
+            "cvp": (2 * self._modelEngine.Models[right_atrium].PresMax + self._modelEngine.Models[right_atrium].PresMin) / 3,
             "resp_rate": self._modelEngine.Models['Breathing'].RespRate
         }
         
@@ -414,82 +417,65 @@ class Interface:
         self.draw_xy_graph(property_x, property_y)
     
       # plotters
-    def plot_vitals(self, time):
-        self.plot_time_graph(["AA.systole", "AA.diastole", "Heart.heart_rate", "breathing.spont_resp_rate", "AA.so2"], time_to_calculate=time, combined=True, sharey=False, autoscale=False, ylowerlim=0, yupperlim=200, fill=False, fill_between=True)
+    def plot_vitals(self, time = 10, aorta = "AA", heart = "Heart", breathing = "Breathing"):
+        self.plot_time_graph([  aorta + ".PresMax", aorta + ".PresMin", heart + ".HeartRate",  breathing +".RespRate", "AA.so2"], time_to_calculate=time, combined=True, sharey=False, autoscale=False, ylowerlim=0, yupperlim=200, fill=False, fill_between=True)
     
     # lung plotters
-    def plot_lung_pressures(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["DS.Pres","ALL.Pres","ALR.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False,analyze=analyze)
+    def plot_lung_pressures(self, time=10, dead_space = "DS", left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
+        self.plot_time_graph([ dead_space + ".Pres",left_lung + ".Pres", right_lung + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False,analyze=analyze)
     
-    def plot_lung_volumes(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["ALL.Vol","ALR.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_lung_volumes(self, time=10, left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
+        self.plot_time_graph([left_lung + ".Vol", right_lung + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_lung_flows(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["MOUTH_DS.Flow","DS_ALL.Flow","DS_ALR.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-        
-    def plot_lung_pressures_left(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["DS.Pres","ALL.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-    
-    def plot_lung_volumes_left(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["ALL.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-    
-    def plot_lung_flows_left(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["MOUTH_DS.Flow","DS_ALL.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-
-    def plot_lung_pressures_right(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["DS.Pres","ALR.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-    
-    def plot_lung_volumes_right(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["ALR.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-    
-    def plot_lung_flows_right(self, time=10, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph(["MOUTH_DS.Flow","DS_ALR.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_lung_flows(self, time=10, mouth = "MOUTH_DS", left_lung = "DS_ALL", right_lung = "DS_ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
+        self.plot_time_graph([ mouth + ".Flow", left_lung + ".Flow", right_lung +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
 
     # heart plotters
-    def plot_heart_pressures(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, fill_between=False, analyze=False):
-        self.plot_time_graph(["LV.Pres","RV.Pres","LA.Pres", "RA.Pres", "AA.Pres", "PA.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_pressures(self, time=2, lv = "LV", rv = "RV", la = "LA", ra = "RA", aorta = "AA", pulm_artery = "PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, fill_between=False, analyze=False):
+        self.plot_time_graph([ lv + ".Pres", rv +".Pres", la + ".Pres", ra + ".Pres", aorta + ".Pres", pulm_artery + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_heart_volumes(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LV.Vol","RV.Vol","LA.Vol", "RA.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_volumes(self, time=2, lv = "LV", rv = "RV", la = "LA", ra = "RA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ lv + ".Vol", rv + ".Vol", la + ".Vol", ra + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_heart_flows(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LA_LV.Flow", "LV_AA.Flow", "RA_RV.Flow", "RV_PA.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_flows(self, time=2, la_lv = "LA_LV", lv_aorta = "LV_AA", ra_rv = "RA_RV", rv_pulm_artery = "RV_PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ la_lv + ".Flow", lv_aorta + ".Flow", ra_rv + ".Flow", rv_pulm_artery + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_heart_pressures_left(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LV.Pres", "LA.Pres", "AA.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_pressures_left(self, time=2, la = "LA", lv = "LV", aorta = "AA",  combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([lv + ".Pres", la + ".Pres", aorta + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_heart_flows_left(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LA_LV.Flow", "LV_AA.Flow"],time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_flows_left(self, time=2,la_lv="LA_LV", lv_aorta="LV_AA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([la_lv+".Flow", lv_aorta+".Flow"],time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_heart_volumes_left(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LA.Vol", "LV.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_volumes_left(self, time=2, la="LA", lv="LV", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([la+".Vol", lv+".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_heart_flows_right(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["RA_RV.Flow", "RV_PA.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_flows_right(self, time=2, ra_rv="RA_RV", rv_pulm_artery="RV_PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ra_rv + ".Flow", rv_pulm_artery +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_heart_volumes_right(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["RA.Vol", "RV.Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_volumes_right(self, time=2, ra="RA", rv="RV", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ra + ".Vol", rv + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_heart_pressures_right(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["RV.Pres", "RA.Pres", "PA.Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_pressures_right(self,time=2, ra="RA", rv="RV", pulm_artery="PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ rv + ".Pres", ra + ".Pres", pulm_artery + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
-    def plot_heart_left(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["LA.Pres","LV.Pres","LA_LV.Flow", "LV_AA.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_left(self, time=2, la="LA", lv="LV",la_lv="LA_LV",lv_aorta="LV_AA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([la + ".Pres", lv + ".Pres", la_lv + ".Flow", lv_aorta + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_heart_right(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["RA.Pres","RV.Pres","RA_RV.Flow", "RV_PA.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_heart_right(self, time=2, ra="RA", rv="RV", ra_rv="RA_RV", rv_pulm_artery="RV_PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ra + ".Pres", rv + ".Pres", ra_rv + ".Flow", rv_pulm_artery + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
 
-    def plot_pda(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["DA.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_pda(self, time=2, pda = "DA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([pda + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_ofo(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["FO.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_ofo(self, time=2, ofo = "FO", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([ofo +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_shunts(self, time=2, combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
-        self.plot_time_graph(["DA.Flow", "FO.Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_shunts(self, time=2, pda = "DA", ofo = "FO", vsd = "VSD", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, analyze=False):
+        self.plot_time_graph([pda + ".Flow", ofo + ".Flow", vsd + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
-    def plot_ventilator_curves(self, time=5, combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True):
-        self.plot_time_graph(["MechanicalVentilator.sensor_pressure", "MechanicalVentilator.sensor_flow", "MechanicalVentilator.sensor_volume", "MechanicalVentilator.sensor_co2"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+
+    def plot_ventilator_curves(self, time=10, ventilator = "MechanicalVentilator", combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True):
+        self.plot_time_graph([ ventilator + ".Pressure", ventilator + ".Flow", ventilator + ".Volume"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
     
     def write_to_excel (self, properties, filename='data', time_to_calculate = 10, sampleinterval = 0.005, calculate=True):
         self.analyze(properties, time_to_calculate = time_to_calculate, sampleinterval = sampleinterval, calculate=calculate)
