@@ -27,8 +27,9 @@ class Interface:
         self.prop_update_interval = 0.015
         self.prop_update_counter = 0
         
-        self.output_path = str(os.path.join(Path().absolute())) + r'/'
+        self.output_path = str(os.path.join(Path().absolute())) + r'/output/'
     
+    # model control
     def calculate(self, time_to_calculate = 10):
         self._modelEngine.Calculate(time_to_calculate)
 
@@ -430,6 +431,9 @@ class Interface:
     def plot_lung_flows(self, time=10, mouth = "MOUTH_DS", left_lung = "DS_ALL", right_lung = "DS_ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
         self.plot_time_graph([ mouth + ".Flow", left_lung + ".Flow", right_lung +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
 
+    def plot_ventilator_curves(self, time=10, ventilator = "MechanicalVentilator", combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True):
+        self.plot_time_graph([ ventilator + ".Pressure", ventilator + ".Flow", ventilator + ".Volume"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    
     # heart plotters
     def plot_heart_pressures(self, time=2, lv = "LV", rv = "RV", la = "LA", ra = "RA", aorta = "AA", pulm_artery = "PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, fill_between=False, analyze=False):
         self.plot_time_graph([ lv + ".Pres", rv +".Pres", la + ".Pres", ra + ".Pres", aorta + ".Pres", pulm_artery + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
@@ -474,9 +478,7 @@ class Interface:
         self.plot_time_graph([pda + ".Flow", ofo + ".Flow", vsd + ".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
         
 
-    def plot_ventilator_curves(self, time=10, ventilator = "MechanicalVentilator", combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True):
-        self.plot_time_graph([ ventilator + ".Pressure", ventilator + ".Flow", ventilator + ".Volume"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
-    
+    # other function
     def write_to_excel (self, properties, filename='data', time_to_calculate = 10, sampleinterval = 0.005, calculate=True):
         self.analyze(properties, time_to_calculate = time_to_calculate, sampleinterval = sampleinterval, calculate=calculate)
         # build a parameter list
