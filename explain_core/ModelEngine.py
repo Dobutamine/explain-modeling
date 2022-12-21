@@ -165,6 +165,9 @@ class ModelEngine:
             # update the datacollector
             self.DataCollector.collect_data(self.ModelingTimeTotal)
 
+            # process the prop changes
+            self.Interface.process_prop_changes()
+
             # increase the model time
             self.ModelingTimeTotal += self.ModelingStepsize
             

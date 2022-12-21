@@ -29,6 +29,17 @@ class Interface:
         
         self.output_path = str(os.path.join(Path().absolute())) + r'/'
     
+    def process_prop_changes(self):
+        # process the propchanges
+        if (self.prop_update_counter >= self.prop_update_interval):
+            self.prop_update_counter = 0
+            for change in self.propChanges:
+                change.update()
+                if change.completed:
+                    self.propChanges.remove(change)
+
+        self.prop_update_counter += self.t
+        
     # property setters and getters
     def set_property(self, prop, new_value, in_time = 0, at_time = 0):
         prop = self.find_model_prop(prop)
@@ -44,6 +55,8 @@ class Interface:
                 print(f'property type mismatch. model property type = {current_value_type}, new value type = {new_value_type}')
         else:
             print("property not found in model")
+
+        print(self.propChanges)
     
     def get_property(self, prop):
         prop = self.find_model_prop(prop)

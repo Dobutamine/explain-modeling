@@ -12,6 +12,11 @@ class BloodTimeVaryingElastance(ModelBaseClass):
     Pres = 0
     PresEd = 0
     PresEs = 0
+    PresMax = 0.0
+    PresMin = 0.0
+    Vol = 0
+    VolMax = 0.0
+    VolMin = 0.0
 
     # external parameters
     Pres0 = 0
@@ -26,6 +31,15 @@ class BloodTimeVaryingElastance(ModelBaseClass):
     Tco2 = 0.0
     Pco2 = 0.0
     Ph = 0.0
+
+    # local parameter
+    _temp_max_pres = -1000.0
+    _temp_min_pres = 1000.0
+    _temp_max_vol = -1000.0
+    _temp_min_vol = 1000.0
+    _update_counter = 0.0
+    _update_interval = 1.0
+
 
     # override the base class CalcModel method
     def CalcModel(self):
@@ -43,6 +57,31 @@ class BloodTimeVaryingElastance(ModelBaseClass):
         self.PresExt = 0.0
         self.PresCc = 0.0
         self.PresMus = 0.0
+
+        # find the min and max values of the last update interval
+        if (self.Pres > self._temp_max_pres):
+            self._temp_max_pres = self.Pres
+        if (self.Pres < self._temp_min_pres):
+            self._temp_min_pres = self.Pres
+
+        if (self.Vol > self._temp_max_vol):
+            self._temp_max_vol = self.Vol
+        if (self.Vol < self._temp_min_vol):
+            self._temp_min_vol = self.Vol
+
+        if (self._update_counter > self._update_interval):
+            self._update_counter = 0.0
+            self.PresMax = self._temp_max_pres
+            self.PresMin = self._temp_min_pres
+            self._temp_max_pres = -1000.0
+            self._temp_min_pres = 1000.0
+
+            self.VolMax = self._temp_max_vol
+            self.VolMin = self._temp_min_vol
+            self._temp_max_vol = -1000.0
+            self._temp_min_vol = 1000.0
+            
+        self._update_counter += self._t
 
 
     def VolumeIn(self, dvol, modelFrom):
