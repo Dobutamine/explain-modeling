@@ -79,6 +79,12 @@ class Interface:
 
         return None    
     
+    def switch_ventilator(self, state):
+        self._modelEngine.Models["MechanicalVentilator"].SwitchVentilator(state)
+    
+    def switch_breathing(self, state):
+        self._modelEngine.Models["Breathing"].SwitchBreathing(state)
+
      # getters
     def get_vitals(self, aorta = "AA", right_atrium = "RA", pulmonary_artery = "PA"):
         vitals = {
@@ -370,7 +376,7 @@ class Interface:
           print("{:<16}: max {:10} min {:10}". format(parameter, max, min))
 
     # plotters    
-    def plot_time_graph (self, properties, time_to_calculate = 10,  combined = True, sharey = True, ylabel = '',  autoscale=True, ylowerlim = 0, yupperlim = 100, fill=True, fill_between=False, zeroline=False, sampleinterval = 0.005, analyze=True):
+    def plot_time_graph (self, properties, time_to_calculate = 10,  combined = True, sharey = True, ylabel = '',  autoscale=True, ylowerlim = 0, yupperlim = 100, fill=True, fill_between=False, zeroline=False, sampleinterval = 0.005, analyze=True, size_x = 18, size_y = 3, dpi=100):
         # first clear the watchllist and this also clears all data
         self._modelEngine.DataCollector.clear_watchlist()
 
@@ -391,13 +397,13 @@ class Interface:
         self._modelEngine.Calculate(time_to_calculate)
 
         # plot the properties
-        self.draw_time_graph(sharey, combined, ylabel, autoscale, ylowerlim, yupperlim, fill, fill_between, zeroline)
+        self.draw_time_graph(sharey, combined, ylabel, autoscale, ylowerlim, yupperlim, fill, fill_between, zeroline, size_x, size_y, dpi)
         
         # analyze
         if analyze:
             self.analyze(properties, time_to_calculate, sampleinterval, calculate=False)
 
-    def plot_xy_graph(self, property_x, property_y, time_to_calculate = 2, sampleinterval = 0.0005):
+    def plot_xy_graph(self, property_x, property_y, time_to_calculate = 2, sampleinterval = 0.0005, size_x = 3, size_y = 3, dpi=100):
         # first clear the watchllist and this also clears all data
         self._modelEngine.DataCollector.clear_watchlist()
 
@@ -415,24 +421,24 @@ class Interface:
         # calculate the model steps
         self._modelEngine.Calculate(time_to_calculate)
 
-        self.draw_xy_graph(property_x, property_y)
+        self.draw_xy_graph(property_x, property_y, size_x, size_y, dpi)
     
       # plotters
-    def plot_vitals(self, time = 10, aorta = "AA", heart = "Heart", breathing = "Breathing"):
-        self.plot_time_graph([  aorta + ".PresMax", aorta + ".PresMin", heart + ".HeartRate",  breathing +".RespRate", "AA.so2"], time_to_calculate=time, combined=True, sharey=False, autoscale=False, ylowerlim=0, yupperlim=200, fill=False, fill_between=True)
+    def plot_vitals(self, time = 10, aorta = "AA", heart = "Heart", breathing = "Breathing", size_x=18, size_y=3, dpi=100):
+        self.plot_time_graph([  aorta + ".PresMax", aorta + ".PresMin", heart + ".HeartRate",  breathing +".RespRate", "AA.so2"], time_to_calculate=time, combined=True, sharey=False, autoscale=False, ylowerlim=0, yupperlim=200, fill=False, fill_between=True, size_x=size_x, size_y=size_y, dpi=dpi)
     
     # lung plotters
-    def plot_lung_pressures(self, time=10, dead_space = "DS", left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph([ dead_space + ".Pres",left_lung + ".Pres", right_lung + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False,analyze=analyze)
+    def plot_lung_pressures(self, time=10, dead_space = "DS", left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False, size_x=18, size_y=3, dpi=100):
+        self.plot_time_graph([ dead_space + ".Pres",left_lung + ".Pres", right_lung + ".Pres"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False,analyze=analyze, size_x=size_x, size_y=size_y, dpi=dpi)
     
-    def plot_lung_volumes(self, time=10, left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph([left_lung + ".Vol", right_lung + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_lung_volumes(self, time=10, left_lung = "ALL", right_lung= "ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False, size_x=18, size_y=3, dpi=100):
+        self.plot_time_graph([left_lung + ".Vol", right_lung + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze, size_x=size_x, size_y=size_y, dpi=dpi)
     
-    def plot_lung_flows(self, time=10, mouth = "MOUTH_DS", left_lung = "DS_ALL", right_lung = "DS_ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False):
-        self.plot_time_graph([ mouth + ".Flow", left_lung + ".Flow", right_lung +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_lung_flows(self, time=10, mouth = "MOUTH_DS", left_lung = "DS_ALL", right_lung = "DS_ALR", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=False, size_x=18, size_y=3, dpi=100):
+        self.plot_time_graph([ mouth + ".Flow", left_lung + ".Flow", right_lung +".Flow"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze, size_x=size_x, size_y=size_y, dpi=dpi)
 
-    def plot_ventilator_curves(self, time=10, ventilator = "MechanicalVentilator", combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True):
-        self.plot_time_graph([ ventilator + ".Pressure", ventilator + ".Flow", ventilator + ".Volume"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze)
+    def plot_ventilator_curves(self, time=10, ventilator = "MechanicalVentilator", combined=False, sharey=False, autoscale=True, ylowerlim=0, yupperlim=100, fill=False, analyze=True, size_x=18, size_y=3, dpi=100):
+        self.plot_time_graph([ ventilator + ".Pres", ventilator + ".Flow", ventilator + ".Vol"], time_to_calculate=time, autoscale=True, combined=combined, sharey=sharey, sampleinterval = 0.0005, ylowerlim=ylowerlim, yupperlim=yupperlim, fill=fill, fill_between=False, analyze=analyze, size_x=size_x, size_y=size_y, dpi=dpi)
     
     # heart plotters
     def plot_heart_pressures(self, time=2, lv = "LV", rv = "RV", la = "LA", ra = "RA", aorta = "AA", pulm_artery = "PA", combined=True, sharey=True, autoscale=True, ylowerlim=0, yupperlim=100, fill=True, fill_between=False, analyze=False):
@@ -500,7 +506,7 @@ class Interface:
         path = self.output_path + filename + '.xlsx'
         df.to_excel(path)        
     
-    def draw_xy_graph(self, property_x, property_y):
+    def draw_xy_graph(self, property_x, property_y, size_x = 3, size_y = 3, dpi=100):
         no_dp = len(self._modelEngine.DataCollector.collected_data)
         x = np.zeros(no_dp)
         y = np.zeros(no_dp)
@@ -509,17 +515,16 @@ class Interface:
           x[index] = t[property_x]
           y[index] = t[property_y]
 
-        plt.figure( figsize=(3, 3), dpi=300)
-        # Subplot of figure 1 with id 211 the data (red line r-, first legend = parameter)
+        plt.figure( figsize=(size_x, size_y), dpi=dpi)
         plt.plot(x, y, self.lines[0], linewidth=1)
-        plt.xlabel(property_x, fontsize=6)
-        plt.ylabel(property_y, fontsize=6)
-        plt.xticks(fontsize=6)
-        plt.yticks(fontsize=6)
+        plt.xlabel(property_x, fontsize=2 * size_y)
+        plt.ylabel(property_y, fontsize=2 * size_y)
+        plt.xticks(fontsize=2 * size_y)
+        plt.yticks(fontsize=2 * size_y)
 
         plt.show()
 
-    def draw_time_graph(self, sharey = False, combined = True, ylabel = '', autoscale=True, ylowerlim = 0, yupperlim = 100, fill=True, fill_between=False, zeroline=False):
+    def draw_time_graph(self, sharey = False, combined = True, ylabel = '', autoscale=True, ylowerlim = 0, yupperlim = 100, fill=True, fill_between=False, zeroline=False, size_x=18, size_y=3, dpi=100):
         parameters = []
         no_parameters = 0
         # get the watch list of the datacollector
@@ -548,13 +553,13 @@ class Interface:
             
         if (combined == False):
           
-          fig, axs = plt.subplots(nrows=no_parameters, ncols=1, figsize=(18, 3 * no_parameters), sharex=True, sharey=sharey, constrained_layout=True)
+          fig, axs = plt.subplots(nrows=no_parameters, ncols=1, figsize=(size_x, size_y * no_parameters), sharex=True, sharey=sharey, constrained_layout=True)
           if (no_parameters > 1):
             for i, ax in enumerate(axs):
               ax.plot(x, y[i], self.lines[i], linewidth=1)
-              ax.set_title(parameters[i], fontsize=10)
-              ax.set_xlabel('time (s)', fontsize=8)
-              ax.set_ylabel(ylabel, fontsize=8) 
+              ax.set_title(parameters[i], fontsize=3 * size_y)
+              ax.set_xlabel('time (s)', fontsize=2 * size_y)
+              ax.set_ylabel(ylabel, fontsize=2 * size_y) 
               if not autoscale:
                  ax.set_ylim([ylowerlim, yupperlim])
               if zeroline:
@@ -563,9 +568,9 @@ class Interface:
                   ax.fill_between(x, y[i], color='blue', alpha=0.3)
           else:
               axs.plot(x, y[0], self.lines[0], linewidth=1)
-              axs.set_title(parameters[0], fontsize=10)
-              axs.set_xlabel('time (s)', fontsize=8)
-              axs.set_ylabel(ylabel, fontsize=8)
+              axs.set_title(parameters[0], fontsize=3 * size_y)
+              axs.set_xlabel('time (s)', fontsize=2 * size_y)
+              axs.set_ylabel(ylabel, fontsize=2 * size_y)
 
               if not autoscale:
                  axs.set_ylim([ylowerlim, yupperlim])
@@ -575,7 +580,7 @@ class Interface:
                   axs.fill_between(x, y[0], color='blue', alpha=0.3)
 
         if (combined):
-          plt.figure( figsize=(18, 3), dpi=300)
+          plt.figure( figsize=(size_x, size_y), dpi=dpi)
           if not autoscale:
                 plt.ylim([ylowerlim, yupperlim])
           for index, parameter in enumerate(parameters):
@@ -585,10 +590,10 @@ class Interface:
                 plt.fill_between(x, y[index], color='blue', alpha=0.3)
           if zeroline:
             plt.hlines(0, np.amin(x),np.amax(x), linestyles='dashed')
-          plt.xlabel('time (s)', fontsize=8)
-          plt.ylabel(ylabel, fontsize=8)
-          plt.xticks(fontsize=8)
-          plt.yticks(fontsize=8)
+          plt.xlabel('time (s)', fontsize=2 * size_y)
+          plt.ylabel(ylabel, fontsize=2 * size_y)
+          plt.xticks(fontsize=2 * size_y)
+          plt.yticks(fontsize=2 * size_y)
           # Add a legend
           plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.22), ncol=6, fontsize=8)
           if fill_between:

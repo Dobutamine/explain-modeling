@@ -1061,7 +1061,7 @@
       "Description": "",
       "ModelType": "MechanicalVentilator",
       "IsEnabled": false,
-      "VolumeGuaranteed": true,
+      "VolumeGuaranteed": false,
       "PipMax": 30.0,
       "VtSet": 0.015,
       "InspTime": 0.4,
@@ -1069,7 +1069,7 @@
       "Pip": 14.7,
       "Peep": 3.7,
       "InspFlow": 10.0,
-      "ExpFlow": 4.0,
+      "ExpFlow": 3.0,
       "Temp": 37.0,
       "Humidity": 1.0,
       "Fo2Dry": 0.205,
@@ -1122,11 +1122,36 @@
       "Diameter": 5.1,
       "Viscosity": 3.5
     },
+    "Placenta": {
+      "Name": "Placenta",
+      "Description": "",
+      "ModelType": "Placenta",
+      "IsEnabled": false
+    },
+    "ECMO": {
+      "Name": "ECMO",
+      "Description": "",
+      "ModelType": "ECMO",
+      "IsEnabled": false
+    },
     "IntrathoracicPressure": {
       "Name": "IntrathoracicPressure",
       "Description": "",
       "ModelType": "IntrathoracicPressure",
-      "IsEnabled": false
+      "IsEnabled": false,
+      "IntraThoracicModels": {
+        "AA": 1.0,
+        "AAR": 1.0,
+        "IVCI": 1.0,
+        "RA": 1.0,
+        "RV": 1.0,
+        "LA": 1.0,
+        "LV": 1.0,
+        "PA": 1.0,
+        "LL": 1.0,
+        "RL": 1.0,
+        "PV": 1.0
+      }
     }
   }
 }

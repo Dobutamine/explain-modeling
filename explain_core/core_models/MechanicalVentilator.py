@@ -34,8 +34,8 @@ class MechanicalVentilator(ModelBaseClass):
     EtCo2 = 0.0
     ExpTime = 1.0
     Flow = 0.0
-    Pressure = 0.0
-    Volume = 0.0
+    Pres = 0.0
+    Vol = 0.0
     Fo2Dry = 0.0
     Fco2Dry = 0.0
     Fn2Dry = 0.0
@@ -257,8 +257,8 @@ class MechanicalVentilator(ModelBaseClass):
         # store etco2 signal
         self.EtCo2_signal = self._etco2_sensor.Pco2
         self.Flow = self._flow_sensor.Flow * 60.0                                           # convert to l/min
-        self.Pressure = (self._pressure_sensor.Pres - self.PresAtm) * 1.35951  # convert to cmH2O relative to atmospheric pressure
-        self.Volume += (self._flow_sensor.Flow * self._t) * 1000.0                          # convert to ml
+        self.Pres = (self._pressure_sensor.Pres - self.PresAtm) * 1.35951  # convert to cmH2O relative to atmospheric pressure
+        self.Vol += (self._flow_sensor.Flow * self._t) * 1000.0                          # convert to ml
         
         # calculate the endotracheal tube resistance
         self.EtTubeResistance(self.Flow)
@@ -298,6 +298,9 @@ class MechanicalVentilator(ModelBaseClass):
     def VolumeControl(self):
         pass
 
+    def HFOV(self):
+        pass
+    
     def PressureLimited(self):
         if self.Inspiration:
             # calculate the inspiratory valve resistance to achieve the desired inspiratory flow
