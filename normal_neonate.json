@@ -1134,24 +1134,47 @@
       "ModelType": "ECMO",
       "IsEnabled": false
     },
+    "ArtificialWhomb": {
+      "Name": "ArtificialWhomb",
+      "Description": "",
+      "ModelType": "ArtificialWhomb",
+      "IsEnabled": false
+    },
+    "Drugs": {
+      "Name": "Drugs",
+      "Description": "",
+      "ModelType": "Drugs",
+      "IsEnabled": false
+    },
+    "Birth": {
+      "Name": "Birth",
+      "Description": "",
+      "ModelType": "Birth",
+      "IsEnabled": false
+    },
+    "Resuscitation": {
+      "Name": "Resuscitation",
+      "Description": "",
+      "ModelType": "Resuscitation",
+      "IsEnabled": false
+    },
+    "Cvvh": {
+      "Name": "Cvvh",
+      "Description": "",
+      "ModelType": "Cvvh",
+      "IsEnabled": false
+    },
+    "Raas": {
+      "Name": "Raas",
+      "Description": "",
+      "ModelType": "Raas",
+      "IsEnabled": false
+    },
     "IntrathoracicPressure": {
       "Name": "IntrathoracicPressure",
       "Description": "",
       "ModelType": "IntrathoracicPressure",
-      "IsEnabled": false,
-      "IntraThoracicModels": {
-        "AA": 1.0,
-        "AAR": 1.0,
-        "IVCI": 1.0,
-        "RA": 1.0,
-        "RV": 1.0,
-        "LA": 1.0,
-        "LV": 1.0,
-        "PA": 1.0,
-        "LL": 1.0,
-        "RL": 1.0,
-        "PV": 1.0
-      }
+      "IsEnabled": false
     }
   }
 }
