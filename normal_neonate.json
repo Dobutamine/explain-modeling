@@ -1122,6 +1122,12 @@
       "Diameter": 5.1,
       "Viscosity": 3.5
     },
+    "Kidneys": {
+      "Name": "Kidneys",
+      "Description": "",
+      "ModelType": "Kidneys",
+      "IsEnabled": false
+    },
     "Placenta": {
       "Name": "Placenta",
       "Description": "",
